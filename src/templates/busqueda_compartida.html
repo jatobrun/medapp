@@ -1,0 +1,51 @@
+{%extends 'base.html'%} {%block body%}
+
+{% if vacio_busqueda %}
+<div class="media content-section animated bounceInDown fast">
+    <div class ="article-metadata">
+        <h3>Upss no hay elementos en la busqueda!</h3>
+        <a class="nav-item nav-link btn btn-success" href="{{url_for('new')}}">Nuevo Estudio</a>
+    </div>
+
+</div>
+{% else %}
+<h2> Se encontraron {{count}} elementos en su busqueda</h2>
+{%for estudio in estudios%}
+
+<article class="media content-section animated bounceInDown fast">
+
+    <img class='rounded-circle article-img'
+        src="{{ url_for('static', filename='profile-pic/'+estudio['creador-imagen']) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <h2><a class="article-title" href="{{ url_for('estudio', _id = estudio._id) }}">{{ estudio.titulo }}</a>
+            </h2>
+            Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a></br>
+            Edad: {{estudio.edad}}
+            Doctor: <a class="mr-2" href="#">{{ estudio.apellido_doctor+' '+estudio.nombre_doctor}}</a></br>
+            Fecha: <a class="mr-2" href="#">{{ estudio.fecha }}</a></br>
+        </div>
+        <div class ="article-metadata">
+            <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
+                href="{{ url_for('actualizar_estudio', _id=estudio._id) }}">Actualizar</a>
+
+        </div>
+        <div>
+            <h5>Clave del estudio:<a href='#'> {{estudio.token}}</a></h5>
+        </div>
+    </div>
+</article>
+{%endfor%}
+{% for page in pages %}
+{% if page %}
+{% if current_page == page %}
+<a class="btn btn-info mb-4" href="{{url_for('busqueda_compartida', page=page, campo = campo, criterio = criterio)}}"> {{page}}</a>
+{% else %}
+<a class="btn btn-outline-info mb-4" href="{{url_for('busqueda_compartida', page=page, campo = campo, criterio = criterio)}}"> {{page}}</a>
+{% endif %}
+{% else %}
+·
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}

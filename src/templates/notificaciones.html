@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block body %}
+{% if vacio_notificaciones %}
+<div class="media content-section animated bounceInDown fast">
+  <div class ="article-metadata">
+      <h3>Felicidades no tienes ningun estudio pendiente!!</h3>
+  </div>
+
+</div>
+{% else %}
+{%for notificacion in notificaciones%}
+
+<article class="media content-section animated bounceInDown fast">
+  <div class="media-body">
+    <div class="article-metadata">
+      <h4 class="text-muted">Estudio pendiente: <a class="article-title" href="{{ url_for('actualizar_estudio', _id=notificacion._id) }}">{{ notificacion.token }}</h2></h4>
+</article>
+{%endfor%} 
+{% endif %}
+{% endblock %}
