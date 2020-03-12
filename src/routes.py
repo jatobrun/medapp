@@ -20,17 +20,16 @@ from math import ceil
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     form = BuscadorForm()
-    form2 = Add_colaboradorForm()
     if form.validate_on_submit():
         estudio = tabla_estudios.find_one({'token': form.token.data})
-        print(estudio)
+    
         return redirect(url_for('estudio', _id = estudio['_id']))
-    return render_template('home.html', title='Home', form =form, legend = 'Holi', css=True, form2 = form)
+    return render_template('home.html', title='Home', legend = 'Holi', css=True, form = form)
 
 
 @app.route("/about")
 def about():
-    return render_template('about.html', title='About')
+    return render_template('about.html', title='About', css = True)
 
 
 @app.route("/historial", methods=['GET', 'POST'])
@@ -472,8 +471,16 @@ def borrar_estudio(_id):
                 app.root_path, 'static/estudio-pic', archivo[0])
             os.remove(picture_path)
     return redirect(url_for('historial'))
-@app.route("/estadisticas/<user>", methods=['GET', 'POST'])
+
+@app.route("/estadisticas/<user>/", methods=['GET', 'POST'])
 def estadisticas(user):
+    if 'user' in session:
+        return render_template('estadisticas.html', title = 'Estadisticas', control_center = True)
+    else:
+        return redirect(url_for('login'))
+
+@app.route("/colaboradores/", methods=['GET', 'POST'])
+def colaboradores():
     if 'user' in session:
         profile = url_for('static', filename='profile-pic/'+session['image'])
         form = ColaboradoresForm()
@@ -489,7 +496,7 @@ def estadisticas(user):
         else:
             vacio_colaboradores = False
             colaboradores = colaboradores[1:]
-    return render_template('estadisticas.html', title='Estadisticas', control_center =True, css = True, form = form, colaboradores = colaboradores, vacio_colaboradores = vacio_colaboradores, profile=profile)
+    return render_template('colaboradores.html', title='Estadisticas', control_center =True, css = True, form = form, colaboradores = colaboradores, vacio_colaboradores = vacio_colaboradores, profile=profile)
 
 
 @app.route('/busqueda/<criterio>/<campo>', methods=['GET', 'POST'])

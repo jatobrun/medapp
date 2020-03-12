@@ -71,7 +71,7 @@ class UpdateAccount_Form(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    titulo = StringField('Titulo')
+    titulo = StringField('Examen realizado')
     nombre_paciente = StringField(
         'Nombre del paciente')
     apellido_paciente = StringField(
@@ -82,8 +82,8 @@ class PostForm(FlaskForm):
     apellido_doctor = StringField(
         'Apellido del doctor')
     contenido = TextAreaField('Sintomas')
-    diagnostico = TextAreaField('Diagnostico')
-    comentarios = TextAreaField('Comentarios')
+    diagnostico = TextAreaField('Diagnostico Presuntivo')
+    comentarios = TextAreaField('Comentarios/Sugerencias')
     archivo1 = FileField('Radiografia 1', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
     archivo2 = FileField('Radiografia 2', validators=[
