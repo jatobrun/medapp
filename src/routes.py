@@ -171,14 +171,14 @@ def new():
                 'usuario': session['user'],
                 'creador': session['user'],
                 'creador-imagen': session['image'],
-                'titulo': form.titulo.data,
-                'nombre_paciente': form.nombre_paciente.data,
-                'apellido_paciente': form.apellido_paciente.data,
+                'titulo': form.titulo.data.lower(),
+                'nombre_paciente': form.nombre_paciente.data.lower(),
+                'apellido_paciente': form.apellido_paciente.data.lower(),
                 'edad': form.edad.data,
                 'cedula': form.cedula.data,
-                'empresa':form.empresa.data,
-                'nombre_doctor': form.nombre_doctor.data,
-                'apellido_doctor': form.apellido_doctor.data,
+                'empresa':form.empresa.data.lower(),
+                'nombre_doctor': form.nombre_doctor.data.lower(),
+                'apellido_doctor': form.apellido_doctor.data.lower(),
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
                 'comentarios': form.comentarios.data,
@@ -339,13 +339,19 @@ def estudio(_id):
     estudio = tabla_estudios.find_one({'_id': ObjectId(_id)})
     creador = tabla_usuarios.find_one({'usuario': estudio['usuario']})
     if 'user' in session:
-        form = Add_colaboradorForm()
-        form.l_colaborador.choices=[(colaborador, colaborador) for colaborador in tabla_usuarios.find_one({'usuario':session['user']})['colaboradores'][1:]]
-        if request.args.to_dict():
-            colaborador = request.args.to_dict()['l_colaborador']
-            tabla_estudios.update_one({'_id': ObjectId(_id)}, {'$set': {'colaboradores':colaborador, 'compartir': 'compartido'}})
-            flash('Colaborador Agregado Satisfactoriamente!', 'success')
-        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form = form)
+        if session['user'] == estudio['creador']:
+            form = Add_colaboradorForm()
+            form.l_colaborador.choices=[(colaborador, colaborador) for colaborador in tabla_usuarios.find_one({'usuario':session['user']})['colaboradores'][1:]]
+            if form.validate_on_submit():
+                print('hola')
+                if request.args.to_dict()['l_colaborador']:
+                    print('que tal')
+                    colaborador = request.args.to_dict()['l_colaborador']
+                    tabla_estudios.update_one({'_id': ObjectId(_id)}, {'$set': {'colaboradores':colaborador, 'compartir': 'compartido'}})
+                    flash('Colaborador Agregado Satisfactoriamente!', 'success')
+                flash('No cuentas con colaboradores disponible')
+            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form = form)
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True)
     else:
         return render_template('estudio.html', title=estudio['titulo'], estudio = estudio, control_center = False, creador = creador, css = True)
 
@@ -420,9 +426,17 @@ def actualizar_estudio(_id):
             archivo8, f_ext8 = save_picture(form.archivo8.data, resize=False)
         else:
             archivo8, f_ext8 = estudio['archivos'][7][0], estudio['archivos'][7][2]
+        if form.archivo9.data:
+            if estudio['archivos'][8][0] != 'nada':
+                picture_path = os.path.join(
+                    app.root_path, 'static/estudio-pic', estudio['archivos'][8][0])
+                os.remove(picture_path)
+            archivo9, f_ext9 = save_picture(form.archivo9.data, resize=False)
+        else:
+            archivo9, f_ext9 = estudio['archivos'][8][0], estudio['archivos'][8][2]
 
         archivos = [(archivo1, '1', f_ext1), (archivo2, '2', f_ext2), (archivo3, '3', f_ext3), (archivo4, '4', f_ext4),
-                    (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8)]
+                    (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8), (archivo9, '9', f_ext9)]
         for archivo in archivos:
             if archivo[0] != 'nada':
                 if archivo[1] == '6' or archivo[1] == '7' or archivo[1] == '8':
@@ -430,12 +444,14 @@ def actualizar_estudio(_id):
                 n_radiografias += 1
         cambios = {
             'usuario': session['user'],
-            'titulo': form.titulo.data,
-            'nombre_paciente': form.nombre_paciente.data,
-            'apellido_paciente': form.apellido_paciente.data,
+            'titulo': form.titulo.data.lower(),
+            'nombre_paciente': form.nombre_paciente.data.lower(),
+            'apellido_paciente': form.apellido_paciente.data.lower(),
+            'cedula': form.cedula.data,
+            'empresa': form.empresa.data,
             'edad': form.edad.data,
-            'nombre_doctor': form.nombre_doctor.data,
-            'apellido_doctor': form.apellido_doctor.data,
+            'nombre_doctor': form.nombre_doctor.data.lower(),
+            'apellido_doctor': form.apellido_doctor.data.lower(),
             'contenido': form.contenido.data,
             'diagnostico': form.diagnostico.data,
             'comentarios': form.comentarios.data,
@@ -452,6 +468,8 @@ def actualizar_estudio(_id):
         form.apellido_doctor.data = estudio['apellido_doctor']
         form.apellido_paciente.data = estudio['apellido_paciente']
         form.edad.data = estudio['edad']
+        form.cedula.data = estudio['cedula']
+        form.empresa.data = estudio['empresa']
         form.comentarios.data = estudio['comentarios']
         form.contenido.data = estudio['contenido']
         form.diagnostico.data = estudio['diagnostico']
@@ -466,7 +484,7 @@ def actualizar_estudio(_id):
         form.archivo6.data = estudio['archivos'][5][0]
         form.archivo7.data = estudio['archivos'][6][0]
         form.archivo8.data = estudio['archivos'][7][0]
-
+        form.archivo9.data = estudio['archivos'][8][0]
     return render_template('create_post.html', title='Actualizar Estudio', control_center=True, form=form, css=True, legend='Actualizar Estudio')
 
 
@@ -514,6 +532,7 @@ def busqueda(criterio, campo):
         limit = 10
         if criterio == 'edad':
             campo = int(campo)
+        campo = campo.lower()
         starting_id = tabla_estudios.find({"$and":[{'creador':session['user']} , {criterio: campo}]}).sort('_id', -1)
         page = request.args.get('page', 1, type=int)
         count = tabla_estudios.count_documents({"$and":[{'creador':session['user']} , {criterio: campo}]})
