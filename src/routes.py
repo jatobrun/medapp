@@ -160,6 +160,13 @@ def new():
             else:
                 archivo8 = 'nada'
                 f_ext8 = '.'
+            if form.archivo9.data:
+                archivo9, f_ext9 = save_picture(
+                    form.archivo9.data, resize=False)
+                n_tomografias += 1
+            else:
+                archivo9 = 'nada'
+                f_ext9 = '.'
             estudio = {
                 'usuario': session['user'],
                 'creador': session['user'],
@@ -168,13 +175,15 @@ def new():
                 'nombre_paciente': form.nombre_paciente.data,
                 'apellido_paciente': form.apellido_paciente.data,
                 'edad': form.edad.data,
+                'cedula': form.cedula.data,
+                'empresa':form.empresa.data,
                 'nombre_doctor': form.nombre_doctor.data,
                 'apellido_doctor': form.apellido_doctor.data,
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
                 'comentarios': form.comentarios.data,
                 'fecha': time.strftime("%d-%m-%Y"),
-                'archivos': [(archivo1, '1', f_ext1), (archivo2, '2', f_ext2), (archivo3, '3', f_ext3), (archivo4, '4', f_ext4), (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8)],
+                'archivos': [(archivo1, '1', f_ext1), (archivo2, '2', f_ext2), (archivo3, '3', f_ext3), (archivo4, '4', f_ext4), (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8), (archivo9, '9', f_ext9)],
                 'token': token,
                 'n_radiografia': n_radiografias,
                 'n_tomografia': n_tomografias,

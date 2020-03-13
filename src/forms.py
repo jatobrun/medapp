@@ -71,19 +71,21 @@ class UpdateAccount_Form(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    titulo = StringField('Examen realizado')
+    titulo = StringField('Examen realizado:')
+    cedula = IntegerField('Cedula:')
+    empresa = StringField('Empresa si aplica:')
     nombre_paciente = StringField(
-        'Nombre del paciente')
+        'Nombre del paciente:')
     apellido_paciente = StringField(
-        'Apellido del paciente')
-    edad = IntegerField('Edad del paciente')
+        'Apellido del paciente:')
+    edad = IntegerField('Edad del paciente:')
     nombre_doctor = StringField(
-        'Nombre del doctor')
+        'Nombre del doctor:')
     apellido_doctor = StringField(
-        'Apellido del doctor')
-    contenido = TextAreaField('Sintomas')
-    diagnostico = TextAreaField('Diagnostico Presuntivo')
-    comentarios = TextAreaField('Comentarios/Sugerencias')
+        'Apellido del doctor:')
+    contenido = TextAreaField('Sintomas:')
+    diagnostico = TextAreaField('Diagnostico Presuntivo:')
+    comentarios = TextAreaField('Comentarios/Sugerencias:')
     archivo1 = FileField('Radiografia 1', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
     archivo2 = FileField('Radiografia 2', validators=[
@@ -100,8 +102,9 @@ class PostForm(FlaskForm):
         FileAllowed(['DCM', 'png', 'jpg', 'dcm'])])
     archivo8 = FileField('Tomografia3 DICOM', validators=[
         FileAllowed(['DCM', 'jpg', 'png', 'dcm'])])
+    archivo9 = FileField('Archivos varios', validators=[FileAllowed(['pdf'])])
     submit = SubmitField('Agregar Estudio')
-
+    
 class BuscadorForm(FlaskForm):
     token = StringField('Ingrese el codigo de tu estudio', validators=[DataRequired()])
     submit = SubmitField('Buscar estudio')
