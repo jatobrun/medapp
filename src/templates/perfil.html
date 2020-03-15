@@ -5,8 +5,6 @@
         <div class="media-body">
             <h2 class="account-heading">{{session['user']}}</h2>
             <p class="text-secondary">{{session['email']}}</p>
-            <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
-            href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a>
         </div>
     </div>
     <div class=" animated fadeInUp ">

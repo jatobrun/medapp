@@ -2,11 +2,12 @@
 <article class="media content-section animated bounceInDown fast">
     <img class='rounded-circle article-img' src="{{ url_for('static', filename='profile-pic/'+creador.image) }}">
     <div class="media-body">
-        <div class="article-metadata">
+        <div >
             <h2 class='article-title'>{{ estudio.titulo }}</h2>
             Paciente: <a class="mr-2" href="#">{{estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a></br>
             Edad: <a class="mr-2" href="#">{{estudio.edad}}</a></br>
             Dotor: <a class="mr-2" href="#">{{ estudio.apellido_doctor+' '+estudio.nombre_doctor}}</a></br>
+            Compartido con: <a class="mr-2" href="#">{{ estudio.colaboradores }}</a></br>
             Fecha: <small class="text-muted">{{estudio.fecha }}</small>
         </div>
 	{% if form %}
@@ -20,6 +21,7 @@
             <form >
                 {{form.hidden_tag()}}
                 <fieldset class ="form-group">
+                    {% if sw_colab %}
                     <div class = "form-group">
                 <label>{{form.l_colaborador.label(class="form-control-label")}}</label>
                 {{form.l_colaborador(class="form-control")}}
@@ -28,6 +30,7 @@
                 <div class="form-group">
                     {{ form.submit(class="btn btn-outline-info") }}
                 </div>
+                {% endif %}
                 </form>
         </div>
 	{% endif %}

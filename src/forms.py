@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, Form, FormField, TextField, SelectMultipleField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, Form, FormField, TextField, SelectMultipleField, SelectField, MultipleFileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from src import tabla_usuarios, tabla_estudios
 from flask import session
@@ -86,7 +86,7 @@ class PostForm(FlaskForm):
     contenido = TextAreaField('Sintomas:')
     diagnostico = TextAreaField('Diagnostico Presuntivo:')
     comentarios = TextAreaField('Comentarios/Sugerencias:')
-    archivo1 = FileField('Radiografia 1', validators=[
+    archivo1 = MultipleFileField('Radiografia 1', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
     archivo2 = FileField('Radiografia 2', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
@@ -114,9 +114,20 @@ class BuscadorForm(FlaskForm):
             raise ValidationError('Esta clave no existe. Porfavor ingrese otra.')
 
 class Buscador2Form(FlaskForm):
-    criterio = SelectField('Buscar por:', choices=[('nombre_paciente', 'Nombre del paciente'), ('apellido_paciente', 'Apellido del Paciente'), ('titulo', 'Titulo'), ('apellido_doctor', 'Apellido del Doctor'), ('nombre_doctor', 'Nombre del doctor'), ('edad', 'Edad del paciente')])
+    criterio = SelectField('Buscar por:', choices=[('apellido_paciente', 'Apellido'), ('cedula', 'Cédula'), ('empresa', 'Empresa'), ('fecha', 'Fecha'), ('token', '#Estudio')])
     campo = StringField(DataRequired())
     submit = SubmitField('Buscar')
 class Add_colaboradorForm(FlaskForm):
     l_colaborador = SelectField('Colaborador')
     submit = SubmitField('Agregar Colaborador')
+
+
+class PaqueteForm(FlaskForm):
+    nombre_paquete = StringField('Nombre del Paquete', validators=[DataRequired()])
+    l_examenes = TextAreaField('Ingrese los examenes al paquete', validators=[DataRequired()])
+    submit = SubmitField('Agregar Paquete')
+
+class EmpresaForm(FlaskForm):
+    nombre_empresa = StringField('Nombre de la Empresa', validators=[DataRequired()])
+    l_paquetes = SelectMultipleField('Ingrese los paquete', validators=[DataRequired()])
+    submit = SubmitField('Agregar Paquete')

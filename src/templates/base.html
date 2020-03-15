@@ -41,7 +41,9 @@
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if control_center %}
-            <a class="nav-item nav-link btn btn-success" href="{{url_for('new')}}">Nuevo Estudio</a>
+            <a class="nav-item nav-link btn btn-success mr-auto" href="{{url_for('new_paquete')}}">Nuevo Paquete</a>
+            <a class="nav-item nav-link btn btn-success mr-auto" href="{{url_for('new_empresa')}}">Nueva Empresa</a>
+            <a class="nav-item nav-link btn btn-success mr-auto" href="{{url_for('new')}}">Nuevo Estudio</a>
             <a class="nav-item nav-link" href="{{url_for('logout')}}">Salir</a>
             {% else %}
             <a class="nav-item nav-link" href="{{url_for('login')}}">Iniciar Sesion</a>
@@ -54,6 +56,7 @@
   </header>
   <main role="main" class="container">
     <div class="row">
+
       <div class="col-md-8">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {%if messages%}
@@ -70,8 +73,8 @@
       {% if control_center %}
       <div class="col-md-4">
         <div class="content-section">
-          <h3>Panel De Control</h3>
-          <p class='text-muted'> Usa nuestros diferentes servicios
+          <h3 align = 'center'>Panel De Control</h3>
+         
             <ul class="list-group">
               <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('index')}}">Notificaciones</a></li>
@@ -79,16 +82,22 @@
                   href="{{url_for('perfil')}}">Perfil</a></li>
               <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('colaboradores')}}">Colaboradores</a></li> 
-	      <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+	            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('historial')}}">Estudios</a></li>
               <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a></li>
               <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+                    href="{{url_for('empresas')}}">Empresas</a></li>
+              <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+                    href="{{url_for('paquetes')}}">Paquetes</a></li>
+              <li class = "list-group-item list-group-item-light"><a class='nav-item nav-link'
+                href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a></li>
+              <!-- <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('consulta')}}">Consulta Virtual</a></li>
               <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                  href="{{url_for('ia')}}">IA</a></li>
+                  href="{{url_for('ia')}}">IA</a></li> -->
             </ul>
-          </p>
+          
         </div>
       </div>
       {% endif %}

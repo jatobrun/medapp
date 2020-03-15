@@ -32,7 +32,7 @@
                 data-target="#deleteModal">Borrar</button>
         </div>
         <div>
-            <h5>Clave del estudio:<a href='#'> {{estudio.token}}</a></h5>
+            <h5>Clave del estudio:<a href="{{url_for('estudio', _id=estudio._id)}}"> {{estudio.token}}</a></h5>
         </div>
     </div>
 </article>

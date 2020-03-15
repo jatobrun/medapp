@@ -55,6 +55,9 @@
             </h2>
             Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a>    Edad: {{estudio.edad}}</br>
             Doctor: <a class="mr-2" href="#">{{ estudio.apellido_doctor+' '+estudio.nombre_doctor}}</a></br>
+            {% if estudio.colaboradores != 'nada' %}
+            Compartido con: <a class="mr-2" href="#">{{ estudio.colaboradores }}</a></br>
+            {% endif %}
             Fecha: <a class="mr-2" href="#">{{ estudio.fecha }}</a></br>
         </div>
         <div class ="article-metadata">

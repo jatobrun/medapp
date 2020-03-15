@@ -55,13 +55,14 @@
             Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a></br>
             Edad: {{estudio.edad}}
             Doctor: <a class="mr-2" href="#">{{ estudio.apellido_doctor+' '+estudio.nombre_doctor}}</a></br>
+            Compartido con: <a class="mr-2" href="#">{{ estudio.colaboradores }}</a></br>
             Fecha: <a class="mr-2" href="#">{{ estudio.fecha }}</a></br>
         </div>
         <div class ="article-metadata">
             <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
                 href="{{ url_for('actualizar_estudio', _id=estudio._id) }}">Actualizar</a>
         <div>
-            <h5>Clave del estudio:<a href='#'> {{estudio.token}}</a></h5>
+            <h5>Clave del estudio:<a href="{{url_for('estudio', _id=estudio._id)}}"> {{estudio.token}}</a></h5>
         </div>
     </div>
 </article>

@@ -3,7 +3,7 @@ import os
 import time
 import secrets
 from flask import render_template, flash, redirect, url_for, session, request
-from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form
+from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form, PaqueteForm, EmpresaForm
 from src import app, bcrypt, tabla_estudios, tabla_usuarios
 # from flask_login import current_user, login_user
 from bson.objectid import ObjectId
@@ -171,14 +171,14 @@ def new():
                 'usuario': session['user'],
                 'creador': session['user'],
                 'creador-imagen': session['image'],
-                'titulo': form.titulo.data.lower(),
-                'nombre_paciente': form.nombre_paciente.data.lower(),
-                'apellido_paciente': form.apellido_paciente.data.lower(),
+                'titulo': form.titulo.data.upper(),
+                'nombre_paciente': form.nombre_paciente.data.upper(),
+                'apellido_paciente': form.apellido_paciente.data.upper(),
                 'edad': form.edad.data,
                 'cedula': form.cedula.data,
-                'empresa':form.empresa.data.lower(),
-                'nombre_doctor': form.nombre_doctor.data.lower(),
-                'apellido_doctor': form.apellido_doctor.data.lower(),
+                'empresa':form.empresa.data.upper(),
+                'nombre_doctor': form.nombre_doctor.data.upper(),
+                'apellido_doctor': form.apellido_doctor.data.upper(),
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
                 'comentarios': form.comentarios.data,
@@ -247,7 +247,7 @@ def register():
         hashed_pass = bcrypt.generate_password_hash(
             register.password.data).decode('utf-8')
         usuario = {'usuario': register.username.data,
-                   'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada']}
+                   'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada'], 'paquetes': [('default', ' ')], 'empresas': [('default', ' ')]}
         tabla_usuarios.insert_one(usuario)
         session['user'] = register.username.data
         session['email'] = register.email.data
@@ -341,16 +341,20 @@ def estudio(_id):
     if 'user' in session:
         if session['user'] == estudio['creador']:
             form = Add_colaboradorForm()
-            form.l_colaborador.choices=[(colaborador, colaborador) for colaborador in tabla_usuarios.find_one({'usuario':session['user']})['colaboradores'][1:]]
-            if form.validate_on_submit():
-                print('hola')
-                if request.args.to_dict()['l_colaborador']:
-                    print('que tal')
-                    colaborador = request.args.to_dict()['l_colaborador']
-                    tabla_estudios.update_one({'_id': ObjectId(_id)}, {'$set': {'colaboradores':colaborador, 'compartir': 'compartido'}})
-                    flash('Colaborador Agregado Satisfactoriamente!', 'success')
-                flash('No cuentas con colaboradores disponible')
-            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form = form)
+            form.l_colaborador.choices=[(colaborador, colaborador) for colaborador in creador['colaboradores'][1:]]
+            #if form.validate_on_submit():
+            print(request.args.to_dict())
+            if request.args.to_dict():
+                colaborador = request.args.to_dict()['l_colaborador']
+                tabla_estudios.update_one({'_id': ObjectId(_id)}, {'$set': {'colaboradores':colaborador, 'compartir': 'compartido'}})
+                flash('Colaborador Agregado Satisfactoriamente!', 'success')
+            contador = len(creador['colaboradores'])
+            if contador == 1 and creador['colaboradores'][0] == 'nada':
+                sw_colab = False
+            else: 
+                sw_colab = True
+            print(sw_colab, contador, creador['colaboradores'])
+            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form = form, sw_colab = sw_colab)
         return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True)
     else:
         return render_template('estudio.html', title=estudio['titulo'], estudio = estudio, control_center = False, creador = creador, css = True)
@@ -444,14 +448,14 @@ def actualizar_estudio(_id):
                 n_radiografias += 1
         cambios = {
             'usuario': session['user'],
-            'titulo': form.titulo.data.lower(),
-            'nombre_paciente': form.nombre_paciente.data.lower(),
-            'apellido_paciente': form.apellido_paciente.data.lower(),
+            'titulo': form.titulo.data.upper(),
+            'nombre_paciente': form.nombre_paciente.data.upper(),
+            'apellido_paciente': form.apellido_paciente.data.upper(),
             'cedula': form.cedula.data,
             'empresa': form.empresa.data,
             'edad': form.edad.data,
-            'nombre_doctor': form.nombre_doctor.data.lower(),
-            'apellido_doctor': form.apellido_doctor.data.lower(),
+            'nombre_doctor': form.nombre_doctor.data.upper(),
+            'apellido_doctor': form.apellido_doctor.data.upper(),
             'contenido': form.contenido.data,
             'diagnostico': form.diagnostico.data,
             'comentarios': form.comentarios.data,
@@ -523,7 +527,7 @@ def colaboradores():
         else:
             vacio_colaboradores = False
             colaboradores = colaboradores[1:]
-    return render_template('colaboradores.html', title='Estadisticas', control_center =True, css = True, form = form, colaboradores = colaboradores, vacio_colaboradores = vacio_colaboradores, profile=profile)
+    return render_template('colaboradores.html', title='Colaboradores', control_center =True, css = True, form = form, colaboradores = colaboradores, vacio_colaboradores = vacio_colaboradores, profile=profile)
 
 
 @app.route('/busqueda/<criterio>/<campo>', methods=['GET', 'POST'])
@@ -532,7 +536,8 @@ def busqueda(criterio, campo):
         limit = 10
         if criterio == 'edad':
             campo = int(campo)
-        campo = campo.lower()
+        else:
+            campo = campo.upper()
         starting_id = tabla_estudios.find({"$and":[{'creador':session['user']} , {criterio: campo}]}).sort('_id', -1)
         page = request.args.get('page', 1, type=int)
         count = tabla_estudios.count_documents({"$and":[{'creador':session['user']} , {criterio: campo}]})
@@ -714,5 +719,61 @@ def busqueda_compartida(criterio, campo):
         else: 
             vacio_busqueda = False
         return render_template('busqueda_compartida.html', title='Busqueda', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_busqueda = vacio_busqueda, criterio = criterio, campo = campo, count = count)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/nuevo-paquete', methods=['GET', 'POST'])
+def new_paquete():
+    if 'user' in session:
+        creador = tabla_usuarios.find_one({'usuario':session['user']})
+        form = PaqueteForm()    
+        if form.validate_on_submit():
+            paquetes = creador['paquetes']
+            l_examenes = form.l_examenes.data.split(', ')
+            paquetes.append((form.nombre_paquete.data, l_examenes))
+            tabla_usuarios.update_one({'usuario': session['user']}, {'$set': {'paquetes': paquetes}})
+            flash('Paquete creado satisfactoriamente', 'success')
+        form.l_examenes.data = ''
+        form.nombre_paquete.data = ''
+        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form = form)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/nueva-empresa', methods=['GET', 'POST'])
+def new_empresa():
+    if 'user' in session:
+        creador = tabla_usuarios.find_one({'usuario':session['user']})
+        form = EmpresaForm()
+        form.l_paquetes.choices=[(paquetes[0], paquetes[0]) for paquetes in creador['paquetes'][1:]]    
+        if form.validate_on_submit():
+            empresas = creador['empresas']
+            l_paquetes = form.l_paquetes.data
+            empresas.append((form.nombre_empresa.data, l_paquetes))
+            tabla_usuarios.update_one({'usuario': session['user']}, {'$set': {'empresas': empresas}})
+            flash('Empresa creada satisfactoriamente', 'success')
+        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form = form)
+    else:
+        return redirect(url_for('login'))
+@app.route('/paquetes', methods=['GET', 'POST'])
+def paquetes():
+    if 'user' in session:
+        paquetes = tabla_usuarios.find_one({'usuario': session['user']})['paquetes']
+        if len(paquetes) == 1:
+            vacio_paquetes = True
+        else: 
+            vacio_paquetes = False
+        return render_template('paquetes.html', title= 'Paquetes', control_center = True, css = True, vacio_paquetes = vacio_paquetes, paquetes = paquetes[1:])
+    else:
+        return redirect(url_for('login'))
+@app.route('/empresas', methods=['GET', 'POST'])
+def empresas():
+    if 'user' in session:
+        empresas = tabla_usuarios.find_one({'usuario': session['user']})['empresas']
+        if len(empresas) == 1:
+            vacio_empresas = True
+        else: 
+            vacio_empresas = False
+        return render_template('empresas.html', title= 'Empresas', control_center = True, css = True, vacio_empresas = vacio_empresas, empresas = empresas[1:])
     else:
         return redirect(url_for('login'))

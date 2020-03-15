@@ -26,13 +26,13 @@
              endif %}
                </div>
                <p class="form-control-label">Tus colaboradores</p>
-               <div class = "media content-section animated fadeInUp">
+               <div align="justify" class = "media content-section animated fadeInUp ">
                    
                    {% if vacio_colaboradores %}    
                    <p> No tienes colaboradores disponibles. Agrega algun colaborador con el cual podras compartir tus estudios clinicos.</p>
                    {% else %}
                        {% for colaborador in colaboradores %}
-                       {{colaborador+', '}}
+                       {{colaborador+' - '}}
                        {% endfor %}
                    {% endif %}
                 </div>

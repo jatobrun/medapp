@@ -1,0 +1,65 @@
+{%extends 'base.html'%} {%block body%}
+{% if vacio_empresas %}
+<div class="media content-section animated bounceInDown fast">
+    <div class ="article-metadata">
+        <h3>No tienes empresas disponibles porfavor ingresa uno!</h3>
+        <a class="nav-item nav-link btn btn-success" href="{{url_for('new_empresa')}}">Nueva Empresa</a>
+    </div>
+
+</div>
+{% else %}
+{%for empresa in empresas%}
+
+<article class="media content-section animated bounceInDown fast">
+    <div class="media-body">
+        <div class="article-metadata">
+            <h2 class="article-title">{{ empresa[0] }}</h2>
+            <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
+                href="#">Actualizar</a>
+            <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"
+                data-target="#deleteModal">Borrar</button>
+        </div>
+        <div class ="article-metadata">
+            <p>Examenes:{% for empresa in empresa[1] %}
+            {{empresa + ' - '}}
+            {% endfor %}</p>
+        </div>
+    </div>
+</article>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Borrar Empresa?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                Seguro desea continuar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <form action="#" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Borrar">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%endfor%}
+<!-- {% for page in pages %}
+{% if page %}
+{% if current_page == page %}
+<a class="btn btn-info mb-4" href="{{url_for('historial', page=page)}}"> {{page}}</a>
+{% else %}
+<a class="btn btn-outline-info mb-4" href="{{url_for('historial', page=page)}}"> {{page}}</a>
+{% endif %}
+{% else %}
+·
+{% endif %}
+{% endfor %} -->
+{% endif %}
+{% endblock %}
+
