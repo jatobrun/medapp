@@ -1,0 +1,46 @@
+{%extends 'base.html'%} {%block body%}
+<div class="content-section animated fadeInUp">
+    <div>
+        <form method="POST" action="" enctype='multipart/form-data'>
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Examenes</legend>
+                <div class="form-group">
+                    {{ form.nombre_examen.label(class="form-control-label") }}
+                    {% if form.nombre_examen.errors %} {{ form.nombre_examen(class="form-control form-control-lg
+             is-invalid") }}
+                   <div class="invalid-feedback">
+                       {% for error in form.nombre_examen.errors %}
+                       <span>{{ error }}</span>
+                       {% endfor %}
+                   </div>
+                   {% else %} {{ form.nombre_examen(class="form-control form-control-lg") }} {%
+             endif %}
+               </div>
+               <div class="form-group">
+                {{ form.tarifa.label(class="form-control-label") }}
+                {% if form.tarifa.errors %} {{ form.tarifa(class="form-control form-control-lg
+         is-invalid") }}
+               <div class="invalid-feedback">
+                   {% for error in form.tarifa.errors %}
+                   <span>{{ error }}</span>
+                   {% endfor %}
+               </div>
+               {% else %} {{ form.tarifa(class="form-control form-control-lg") }} {%
+         endif %}
+           </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <p class="form-control-label">Tus Examenes</p> 
+        <div align="justify" class = "media content-section animated fadeInUp ">
+            
+                {% for examen in examenes %}
+                {{examen['nombre']+' - '}}
+                {% endfor %}
+         </div>
+    </div>
+    </div>
+{% endblock %}

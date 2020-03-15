@@ -12,6 +12,9 @@ client = MongoClient("mongodb+srv://jatobrun:jatobrun@cluster0-hx8rh.mongodb.net
 db = client['MedScan']
 tabla_usuarios = db['Usuarios']
 tabla_estudios = db['Estudios']
+tabla_examenes = db['Examenes']
+tabla_paquetes = db['Paquetes']
+tabla_empresas = db['Empresas']
 bcrypt = Bcrypt(app)
 #login_manager = LoginManager(app)
 from src import routes

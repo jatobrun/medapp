@@ -13,17 +13,19 @@
 <article class="media content-section animated bounceInDown fast">
     <div class="media-body">
         <div class="article-metadata">
-            <h2 class="article-title">{{ paquete[0] }}</h2>
+            <h2 class="article-title">{{ paquete.nombre }}</h2>
             <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
                 href="#">Actualizar</a>
             <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"
                 data-target="#deleteModal">Borrar</button>
         </div>
-        <div class ="article-metadata">
-            <p>Examenes:{% for examen in paquete[1] %}
-            {{examen + ' - '}}
-            {% endfor %}</p>
-        </div>
+        <h2>Examenes:</h2>
+        <div align="justify" class = "media content-section animated fadeInUp ">
+            
+                {% for examen in paquete.examenes %}
+                {{examen+' - '}}
+                {% endfor %}
+         </div>
     </div>
 </article>
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"

@@ -13,16 +13,11 @@
 <article class="media content-section animated bounceInDown fast">
     <div class="media-body">
         <div class="article-metadata">
-            <h2 class="article-title">{{ empresa[0] }}</h2>
+            <h2 class="article-title">{{ empresa.nombre }}</h2>
             <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
                 href="#">Actualizar</a>
             <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"
                 data-target="#deleteModal">Borrar</button>
-        </div>
-        <div class ="article-metadata">
-            <p>Examenes:{% for empresa in empresa[1] %}
-            {{empresa + ' - '}}
-            {% endfor %}</p>
         </div>
     </div>
 </article>

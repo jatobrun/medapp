@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, Form, FormField, TextField, SelectMultipleField, SelectField, MultipleFileField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, Form, FormField, TextField, SelectMultipleField, SelectField, MultipleFileField, widgets
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from src import tabla_usuarios, tabla_estudios
 from flask import session
@@ -122,12 +122,23 @@ class Add_colaboradorForm(FlaskForm):
     submit = SubmitField('Agregar Colaborador')
 
 
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
 class PaqueteForm(FlaskForm):
     nombre_paquete = StringField('Nombre del Paquete', validators=[DataRequired()])
-    l_examenes = TextAreaField('Ingrese los examenes al paquete', validators=[DataRequired()])
+    l_examenes = MultiCheckboxField('Examenes', validators=[DataRequired()])
+    tarifa = IntegerField('Tarifa del paquete(dolares americanos)')
     submit = SubmitField('Agregar Paquete')
 
 class EmpresaForm(FlaskForm):
     nombre_empresa = StringField('Nombre de la Empresa', validators=[DataRequired()])
-    l_paquetes = SelectMultipleField('Ingrese los paquete', validators=[DataRequired()])
-    submit = SubmitField('Agregar Paquete')
+    l_examenes = MultiCheckboxField('Examenes', validators=[DataRequired()])
+    l_paquetes = SelectMultipleField('Paquetes', validators=[DataRequired()])
+    submit = SubmitField('Agregar Empresa')
+
+class ExamenForm(FlaskForm):
+    nombre_examen = StringField('Nombre del examen', validators=[DataRequired()])
+    tarifa = IntegerField('Tarifa del examen(dolares americanos)', validators=[DataRequired()])
+    submit = SubmitField('Agregar Examen')

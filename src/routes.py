@@ -3,8 +3,8 @@ import os
 import time
 import secrets
 from flask import render_template, flash, redirect, url_for, session, request
-from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form, PaqueteForm, EmpresaForm
-from src import app, bcrypt, tabla_estudios, tabla_usuarios
+from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form, PaqueteForm, EmpresaForm, ExamenForm
+from src import app, bcrypt, tabla_estudios, tabla_usuarios, tabla_examenes, tabla_paquetes, tabla_empresas
 # from flask_login import current_user, login_user
 from bson.objectid import ObjectId
 from math import ceil
@@ -247,7 +247,7 @@ def register():
         hashed_pass = bcrypt.generate_password_hash(
             register.password.data).decode('utf-8')
         usuario = {'usuario': register.username.data,
-                   'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada'], 'paquetes': [('default', ' ')], 'empresas': [('default', ' ')]}
+                   'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada']}
         tabla_usuarios.insert_one(usuario)
         session['user'] = register.username.data
         session['email'] = register.email.data
@@ -722,19 +722,40 @@ def busqueda_compartida(criterio, campo):
     else:
         return redirect(url_for('login'))
 
+@app.route('/nuevo-examen', methods=['GET', 'POST'])
+def new_examen():
+    if 'user' in session:
+        form = ExamenForm()    
+        if form.validate_on_submit():
+            examen = {
+                'nombre': form.nombre_examen.data.upper(),
+                'creador': session['user'],
+                'tarifa': form.tarifa.data
+            }
+            tabla_examenes.insert_one(examen)
+            flash('Paquete creado satisfactoriamente', 'success')
+        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
+        form.nombre_examen.data = ''
+        form.tarifa.data = 0
+        return render_template('examen.html', title='Examenes', control_center=True, css=True, form = form, examenes = examenes)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/nuevo-paquete', methods=['GET', 'POST'])
 def new_paquete():
     if 'user' in session:
-        creador = tabla_usuarios.find_one({'usuario':session['user']})
-        form = PaqueteForm()    
+        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
+        form = PaqueteForm()
+        form.l_examenes.choices=[(examen['nombre'], examen['nombre']) for examen in examenes]    
         if form.validate_on_submit():
-            paquetes = creador['paquetes']
-            l_examenes = form.l_examenes.data.split(', ')
-            paquetes.append((form.nombre_paquete.data, l_examenes))
-            tabla_usuarios.update_one({'usuario': session['user']}, {'$set': {'paquetes': paquetes}})
+            paquete = {
+                'nombre': form.nombre_paquete.data.upper(),
+                'creador': session['user'],
+                'examenes': form.l_examenes.data,
+                'tarifa': form.tarifa.data
+            }
+            tabla_paquetes.insert_one(paquete)
             flash('Paquete creado satisfactoriamente', 'success')
-        form.l_examenes.data = ''
         form.nombre_paquete.data = ''
         return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form = form)
     else:
@@ -743,14 +764,19 @@ def new_paquete():
 @app.route('/nueva-empresa', methods=['GET', 'POST'])
 def new_empresa():
     if 'user' in session:
-        creador = tabla_usuarios.find_one({'usuario':session['user']})
+        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
+        paquetes = tabla_paquetes.find({'creador':session['user']}).sort("nombre", 1)
         form = EmpresaForm()
-        form.l_paquetes.choices=[(paquetes[0], paquetes[0]) for paquetes in creador['paquetes'][1:]]    
+        form.l_paquetes.choices=[(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+        form.l_examenes.choices=[(examen['nombre'], examen['nombre']) for examen in examenes]   
         if form.validate_on_submit():
-            empresas = creador['empresas']
-            l_paquetes = form.l_paquetes.data
-            empresas.append((form.nombre_empresa.data, l_paquetes))
-            tabla_usuarios.update_one({'usuario': session['user']}, {'$set': {'empresas': empresas}})
+            empresa ={
+                'nombre': form.nombre_empresa.data.upper(),
+                'paquetes': form.l_paquetes.data,
+                'examenes': form.l_examenes.data,
+                'creador': session['user']
+            }
+            tabla_empresas.insert_one(empresa)
             flash('Empresa creada satisfactoriamente', 'success')
         return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form = form)
     else:
@@ -758,22 +784,14 @@ def new_empresa():
 @app.route('/paquetes', methods=['GET', 'POST'])
 def paquetes():
     if 'user' in session:
-        paquetes = tabla_usuarios.find_one({'usuario': session['user']})['paquetes']
-        if len(paquetes) == 1:
-            vacio_paquetes = True
-        else: 
-            vacio_paquetes = False
-        return render_template('paquetes.html', title= 'Paquetes', control_center = True, css = True, vacio_paquetes = vacio_paquetes, paquetes = paquetes[1:])
+        paquetes = tabla_paquetes.find({'creador': session['user']}).sort("_id", -1)
+        return render_template('paquetes.html', title= 'Paquetes', control_center = True, css = True, paquetes = paquetes)
     else:
         return redirect(url_for('login'))
 @app.route('/empresas', methods=['GET', 'POST'])
 def empresas():
     if 'user' in session:
-        empresas = tabla_usuarios.find_one({'usuario': session['user']})['empresas']
-        if len(empresas) == 1:
-            vacio_empresas = True
-        else: 
-            vacio_empresas = False
-        return render_template('empresas.html', title= 'Empresas', control_center = True, css = True, vacio_empresas = vacio_empresas, empresas = empresas[1:])
+        empresas = tabla_empresas.find({'creador': session['user']}).sort("_id", -1)
+        return render_template('empresas.html', title= 'Empresas', control_center = True, css = True, empresas = empresas)
     else:
         return redirect(url_for('login'))
