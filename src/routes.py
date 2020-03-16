@@ -100,6 +100,12 @@ def historial():
 def new():
     if 'user' in session:
         form = PostForm()
+        empresas = tabla_empresas.find({'creador': session['user']})
+        paquetes = tabla_paquetes.find({'creador': session['user']})
+        creador = tabla_usuarios.find_one({'usuario': session['user']})
+        form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
+        form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
+        form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
         if form.validate_on_submit():
             n_radiografias = 0
             n_tomografias = 0
@@ -178,7 +184,7 @@ def new():
                 'cedula': form.cedula.data,
                 'empresa': form.empresa.data.upper(),
                 'nombre_doctor': form.nombre_doctor.data.upper(),
-                'apellido_doctor': form.apellido_doctor.data.upper(),
+                'paquete':form.paquete.data.upper(),
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
                 'comentarios': form.comentarios.data,
@@ -187,7 +193,7 @@ def new():
                 'token': token,
                 'n_radiografia': n_radiografias,
                 'n_tomografia': n_tomografias,
-                'colaboradores': "nada"
+                'colaboradores': form.colaborador.data
             }
             tabla_estudios.insert_one(estudio)
             flash('Estudio registrado correctamente', 'success')
@@ -248,6 +254,20 @@ def register():
             register.password.data).decode('utf-8')
         usuario = {'usuario': register.username.data,
                    'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada']}
+        paquete = {
+            'nombre': 'ninguno'.upper(),
+            'creador': register.username.data,
+            'examenes': 'ninguno',
+            'tarifa': 0
+        }
+        empresa = {
+            'nombre': 'particular'.upper(),
+            'paquetes': 'ninguno',
+            'examenes': 'ninguno',
+            'creador': register.username.data
+        }
+        tabla_empresas.insert_one(empresa)
+        tabla_paquetes.insert_one(paquete)
         tabla_usuarios.insert_one(usuario)
         session['user'] = register.username.data
         session['email'] = register.email.data
@@ -366,6 +386,12 @@ def estudio(_id):
 def actualizar_estudio(_id):
     estudio = tabla_estudios.find_one({'_id': ObjectId(_id)})
     form = PostForm()
+    empresas = tabla_empresas.find({'creador': session['user']})
+    paquetes = tabla_paquetes.find({'creador': session['user']})
+    creador = tabla_usuarios.find_one({'usuario': session['user']})
+    form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
+    form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
+    form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
     if form.validate_on_submit():
         n_radiografias = 0
         n_tomografias = 0
@@ -456,23 +482,25 @@ def actualizar_estudio(_id):
             'apellido_paciente': form.apellido_paciente.data.upper(),
             'cedula': form.cedula.data,
             'empresa': form.empresa.data,
+            'paquete': form.paquete.data,
             'edad': form.edad.data,
             'nombre_doctor': form.nombre_doctor.data.upper(),
-            'apellido_doctor': form.apellido_doctor.data.upper(),
             'contenido': form.contenido.data,
             'diagnostico': form.diagnostico.data,
             'comentarios': form.comentarios.data,
             'fecha': time.strftime("%d-%m-%Y"),
             'archivos': archivos,
             'n_radiografia': n_radiografias,
-            'n_tomografia': n_tomografias
+            'n_tomografia': n_tomografias,
+            'colaboradores': form.colaborador.data
         }
         tabla_estudios.update_one(
             {'usuario': session['user']}, {'$set': cambios})
         flash('Cambios Realizados Satisfactoriamente!', 'success')
         return redirect(url_for('estudio', _id=estudio['_id']))
     elif request.method == 'GET':
-        form.apellido_doctor.data = estudio['apellido_doctor']
+        form.paquete.data = estudio['paquete']
+        form.colaborador.data = estudio['colaboradores']
         form.apellido_paciente.data = estudio['apellido_paciente']
         form.edad.data = estudio['edad']
         form.cedula.data = estudio['cedula']
@@ -510,7 +538,7 @@ def borrar_estudio(_id):
 @app.route("/estadisticas/<user>/", methods=['GET', 'POST'])
 def estadisticas(user):
     if 'user' in session:
-        return render_template('estadisticas.html', title='Estadisticas', control_center=True)
+        return render_template('estadisticas.html', title='Estadisticas', control_center=True, css = True)
     else:
         return redirect(url_for('login'))
 
@@ -539,7 +567,7 @@ def colaboradores():
 def busqueda(criterio, campo):
     if 'user' in session:
         limit = 10
-        if criterio == 'edad':
+        if criterio == 'edad' or criterio == 'cedula' :
             campo = int(campo)
         else:
             campo = campo.upper()
@@ -674,7 +702,7 @@ def estudios_compartidos():
 def busqueda_compartida(criterio, campo):
     if 'user' in session:
         limit = 10
-        if criterio == 'edad':
+        if criterio == 'edad' or criterio == 'cedula':
             campo = int(campo)
         starting_id = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
                                           '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]}).sort('_id', -1)
@@ -776,7 +804,7 @@ def new_paquete():
             tabla_paquetes.insert_one(paquete)
             flash('Paquete creado satisfactoriamente', 'success')
         form.nombre_paquete.data = ''
-        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form=form)
+        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form=form, legend = 'Nuevo Paquete')
     else:
         return redirect(url_for('login'))
 
@@ -802,7 +830,7 @@ def new_empresa():
             }
             tabla_empresas.insert_one(empresa)
             flash('Empresa creada satisfactoriamente', 'success')
-        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form=form)
+        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form=form, legend = 'Nueva Empresa')
     else:
         return redirect(url_for('login'))
 
@@ -810,9 +838,13 @@ def new_empresa():
 @app.route('/paquetes', methods=['GET', 'POST'])
 def paquetes():
     if 'user' in session:
-        paquetes = tabla_paquetes.find(
-            {'creador': session['user']}).sort("_id", -1)
-        return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes)
+        paquetes = []
+        busqueda = tabla_paquetes.find_one({'creador': session['user']})
+        if busqueda:
+            paquetes = tabla_paquetes.find({'creador': session['user']}).sort("_id", -1)
+            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes = False)
+        else:
+            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes = True)
     else:
         return redirect(url_for('login'))
 
@@ -820,8 +852,72 @@ def paquetes():
 @app.route('/empresas', methods=['GET', 'POST'])
 def empresas():
     if 'user' in session:
-        empresas = tabla_empresas.find(
-            {'creador': session['user']}).sort("_id", -1)
-        return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas)
+        empresas = []
+        busqueda = tabla_empresas.find_one({'creador': session['user']})
+        if busqueda:
+            empresas = tabla_empresas.find({'creador': session['user']}).sort("_id", -1)
+            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas = False)
+        else:
+            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas = True)
+            
     else:
         return redirect(url_for('login'))
+
+@app.route("/paquetes/<_id>/delete", methods=['POST'])
+def borrar_paquete(_id):
+    tabla_paquetes.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('paquetes'))
+
+@app.route("/empresas/<_id>/delete", methods=['POST'])
+def borrar_empresa(_id):
+    tabla_empresas.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('empresas'))
+
+@app.route("/paquetes/<_id>/update", methods=['GET', 'POST'])
+def actualizar_paquete(_id):
+    paquete = tabla_paquetes.find_one({'_id': ObjectId(_id)})
+    examenes = tabla_examenes.find({'creador': session['user']})
+    form = PaqueteForm()
+    form.l_examenes.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
+    if form.validate_on_submit():
+        cambios = {
+            'creador': session['user'],
+            'nombre': form.nombre_paquete.data.upper(),
+            'examenes': form.l_examenes.data,
+            'tarifa': form.tarifa.data
+        }
+        tabla_paquetes.update_one(
+            {'creador': session['user']}, {'$set': cambios})
+        flash('Cambios Realizados Satisfactoriamente!', 'success')
+        return redirect(url_for('paquetes'))
+    elif request.method == 'GET':
+        form.nombre_paquete.data = paquete['nombre']
+        form.l_examenes.data = paquete['examenes']
+        form.tarifa.data = paquete['tarifa']
+    return render_template('new_paquete.html', title='Actualizar Paquete', control_center=True, form=form, css=True, legend = 'Actualizar Paquete')
+
+@app.route("/empresas/<_id>/update", methods=['GET', 'POST'])
+def actualizar_empresa(_id):
+    empresa = tabla_empresas.find_one({'_id': ObjectId(_id)})
+    form = EmpresaForm()
+    examenes = tabla_examenes.find({'creador': session['user']})
+    paquetes = tabla_paquetes.find({'creador': session['user']})
+    form.l_examenes.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
+    form.l_paquetes.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+    if form.validate_on_submit():
+        cambios = {
+            'creador': session['user'],
+            'nombre': form.nombre_empresa.data.upper(),
+            'examenes': form.l_examenes.data,
+            'paquetes': form.l_paquetes.data
+        }
+        tabla_empresas.update_one(
+            {'creador': session['user']}, {'$set': cambios})
+        flash('Cambios Realizados Satisfactoriamente!', 'success')
+        return redirect(url_for('empresas'))
+    elif request.method == 'GET':
+        form.nombre_empresa.data = empresa['nombre']
+        form.l_examenes.data = empresa['examenes']
+        form.l_paquetes.data = empresa['paquetes']
+    return render_template('new_empresa.html', title='Actualizar Empresa', control_center=True, form=form, css=True, legend = 'Actualizar Empresa')
+
