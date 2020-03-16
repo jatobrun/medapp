@@ -323,7 +323,7 @@ def index():
             vacio_notificaciones = True
         else:
             vacio_notificaciones = False
-        return render_template('notificaciones.html', title='Index', control_center=True, css=True, notificaciones=notificaciones, vacio_notificaciones=vacio_notificaciones)
+        return render_template('notificaciones.html', title='Notificaciones ', control_center=True, css=True, notificaciones=notificaciones, vacio_notificaciones=vacio_notificaciones)
     else:
         return redirect(url_for('login'))
 
