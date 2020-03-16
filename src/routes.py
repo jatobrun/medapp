@@ -22,14 +22,14 @@ def home():
     form = BuscadorForm()
     if form.validate_on_submit():
         estudio = tabla_estudios.find_one({'token': form.token.data})
-    
-        return redirect(url_for('estudio', _id = estudio['_id']))
-    return render_template('home.html', title='Home', legend = 'Holi', css=True, form = form)
+
+        return redirect(url_for('estudio', _id=estudio['_id']))
+    return render_template('home.html', title='Home', legend='Holi', css=True, form=form)
 
 
 @app.route("/about")
 def about():
-    return render_template('about.html', title='About', css = True)
+    return render_template('about.html', title='About', css=True)
 
 
 @app.route("/historial", methods=['GET', 'POST'])
@@ -86,12 +86,12 @@ def historial():
                 '$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_historial = True
-        else: 
+        else:
             vacio_historial = False
         form = Buscador2Form()
         if form.validate_on_submit():
-            return redirect(url_for('busqueda', campo = form.campo.data, criterio = form.criterio.data))
-        return render_template('historial.html', title='Estudios', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial = vacio_historial, form = form)
+            return redirect(url_for('busqueda', campo=form.campo.data, criterio=form.criterio.data))
+        return render_template('historial.html', title='Estudios', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial=vacio_historial, form=form)
     else:
         return redirect(url_for('login'))
 
@@ -176,7 +176,7 @@ def new():
                 'apellido_paciente': form.apellido_paciente.data.upper(),
                 'edad': form.edad.data,
                 'cedula': form.cedula.data,
-                'empresa':form.empresa.data.upper(),
+                'empresa': form.empresa.data.upper(),
                 'nombre_doctor': form.nombre_doctor.data.upper(),
                 'apellido_doctor': form.apellido_doctor.data.upper(),
                 'contenido': form.contenido.data,
@@ -323,7 +323,7 @@ def index():
             vacio_notificaciones = True
         else:
             vacio_notificaciones = False
-        return render_template('notificaciones.html', title='Index', control_center=True, css=True, notificaciones = notificaciones, vacio_notificaciones = vacio_notificaciones)
+        return render_template('notificaciones.html', title='Index', control_center=True, css=True, notificaciones=notificaciones, vacio_notificaciones=vacio_notificaciones)
     else:
         return redirect(url_for('login'))
 
@@ -341,23 +341,26 @@ def estudio(_id):
     if 'user' in session:
         if session['user'] == estudio['creador']:
             form = Add_colaboradorForm()
-            form.l_colaborador.choices=[(colaborador, colaborador) for colaborador in creador['colaboradores'][1:]]
-            #if form.validate_on_submit():
+            form.l_colaborador.choices = [
+                (colaborador, colaborador) for colaborador in creador['colaboradores'][1:]]
+            # if form.validate_on_submit():
             print(request.args.to_dict())
             if request.args.to_dict():
                 colaborador = request.args.to_dict()['l_colaborador']
-                tabla_estudios.update_one({'_id': ObjectId(_id)}, {'$set': {'colaboradores':colaborador, 'compartir': 'compartido'}})
+                tabla_estudios.update_one({'_id': ObjectId(_id)}, {
+                                          '$set': {'colaboradores': colaborador, 'compartir': 'compartido'}})
                 flash('Colaborador Agregado Satisfactoriamente!', 'success')
             contador = len(creador['colaboradores'])
             if contador == 1 and creador['colaboradores'][0] == 'nada':
                 sw_colab = False
-            else: 
+            else:
                 sw_colab = True
             print(sw_colab, contador, creador['colaboradores'])
-            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form = form, sw_colab = sw_colab)
+            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form=form, sw_colab=sw_colab)
         return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True)
     else:
-        return render_template('estudio.html', title=estudio['titulo'], estudio = estudio, control_center = False, creador = creador, css = True)
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=False, creador=creador, css=True)
+
 
 @app.route("/historial/<_id>/update", methods=['GET', 'POST'])
 def actualizar_estudio(_id):
@@ -503,12 +506,14 @@ def borrar_estudio(_id):
             os.remove(picture_path)
     return redirect(url_for('historial'))
 
+
 @app.route("/estadisticas/<user>/", methods=['GET', 'POST'])
 def estadisticas(user):
     if 'user' in session:
-        return render_template('estadisticas.html', title = 'Estadisticas', control_center = True)
+        return render_template('estadisticas.html', title='Estadisticas', control_center=True)
     else:
         return redirect(url_for('login'))
+
 
 @app.route("/colaboradores/", methods=['GET', 'POST'])
 def colaboradores():
@@ -522,12 +527,12 @@ def colaboradores():
                 colaboradores.append(form.colaborador.data)
                 tabla_usuarios.update_one({'usuario': session['user']}, {
                                           '$set': {'colaboradores': colaboradores}})
-        if colaboradores[0] == 'nada' and len(colaboradores)<=1:
+        if colaboradores[0] == 'nada' and len(colaboradores) <= 1:
             vacio_colaboradores = True
         else:
             vacio_colaboradores = False
             colaboradores = colaboradores[1:]
-    return render_template('colaboradores.html', title='Colaboradores', control_center =True, css = True, form = form, colaboradores = colaboradores, vacio_colaboradores = vacio_colaboradores, profile=profile)
+    return render_template('colaboradores.html', title='Colaboradores', control_center=True, css=True, form=form, colaboradores=colaboradores, vacio_colaboradores=vacio_colaboradores, profile=profile)
 
 
 @app.route('/busqueda/<criterio>/<campo>', methods=['GET', 'POST'])
@@ -538,12 +543,15 @@ def busqueda(criterio, campo):
             campo = int(campo)
         else:
             campo = campo.upper()
-        starting_id = tabla_estudios.find({"$and":[{'creador':session['user']} , {criterio: campo}]}).sort('_id', -1)
+        starting_id = tabla_estudios.find(
+            {"$and": [{'creador': session['user']}, {criterio: campo}]}).sort('_id', -1)
         page = request.args.get('page', 1, type=int)
-        count = tabla_estudios.count_documents({"$and":[{'creador':session['user']} , {criterio: campo}]})
+        count = tabla_estudios.count_documents(
+            {"$and": [{'creador': session['user']}, {criterio: campo}]})
         total_pages = ceil(count / limit)
         mitad = ceil(total_pages/2)
-        hola = tabla_estudios.find_one({"$and":[{'creador':session['user']} , {criterio: campo}]})
+        hola = tabla_estudios.find_one(
+            {"$and": [{'creador': session['user']}, {criterio: campo}]})
         estudios = []
         pages = []
         print(hola)
@@ -585,16 +593,15 @@ def busqueda(criterio, campo):
                     c += 1
                 print(pages)
             last_id = starting_id[(page-1)*limit]['_id']
-            estudios = tabla_estudios.find({"$and":[{criterio: campo,'creador': session['user']}], '_id': {
-                '$lte': last_id}}).sort('_id', -1).limit(limit) 
+            estudios = tabla_estudios.find({"$and": [{criterio: campo, 'creador': session['user']}], '_id': {
+                '$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_busqueda = True
-        else: 
+        else:
             vacio_busqueda = False
-        return render_template('busqueda.html', title='Busqueda', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_busqueda = vacio_busqueda, criterio = criterio, campo = campo, count = count)
+        return render_template('busqueda.html', title='Busqueda', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_busqueda=vacio_busqueda, criterio=criterio, campo=campo, count=count)
     else:
         return redirect(url_for('login'))
-
 
 
 @app.route("/estudios_compartidos", methods=['GET', 'POST'])
@@ -602,11 +609,14 @@ def estudios_compartidos():
     if 'user' in session:
         limit = 10
         page = request.args.get('page', 1, type=int)
-        starting_id = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}]}]}).sort('_id', -1)
-        count = tabla_estudios.count_documents({'$or': [{'colaboradores': session['user']}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}]}]})
+        starting_id = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and': [
+                                          {'creador': session['user']}, {'compartir': {'$exists': True}}]}]}).sort('_id', -1)
+        count = tabla_estudios.count_documents({'$or': [{'colaboradores': session['user']}, {
+                                               '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}]}]})
         total_pages = ceil(count / limit)
         mitad = ceil(total_pages/2)
-        hola = tabla_estudios.find_one({'$or': [{'colaboradores': session['user']}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}]}]})
+        hola = tabla_estudios.find_one({'$or': [{'colaboradores': session['user']}, {
+                                       '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}]}]})
         estudios = []
         pages = []
         if hola:
@@ -646,15 +656,16 @@ def estudios_compartidos():
                     c += 1
                 print(pages)
             last_id = starting_id[(page-1)*limit]['_id']
-            estudios = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}]}], '_id': {'$lte': last_id}}).sort('_id', -1).limit(limit)
+            estudios = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and': [{'creador': session['user']}, {
+                                           'compartir': {'$exists': True}}]}], '_id': {'$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_historial = True
-        else: 
-            vacio_historial= False
+        else:
+            vacio_historial = False
         form = Buscador2Form()
         if form.validate_on_submit():
-            return redirect(url_for('busqueda_compartida', campo = form.campo.data, criterio = form.criterio.data))
-        return render_template('historial_compartido.html', title='Estudios Compartidos', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial = vacio_historial, form = form)
+            return redirect(url_for('busqueda_compartida', campo=form.campo.data, criterio=form.criterio.data))
+        return render_template('historial_compartido.html', title='Estudios Compartidos', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial=vacio_historial, form=form)
     else:
         return redirect(url_for('login'))
 
@@ -665,12 +676,15 @@ def busqueda_compartida(criterio, campo):
         limit = 10
         if criterio == 'edad':
             campo = int(campo)
-        starting_id = tabla_estudios.find({'$or': [{'$and':[{'colaboradores': session['user']}, {criterio:campo}]}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}, {criterio:campo}]}]}).sort('_id', -1)
+        starting_id = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
+                                          '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]}).sort('_id', -1)
         page = request.args.get('page', 1, type=int)
-        count = tabla_estudios.count_documents({'$or': [{'$and':[{'colaboradores': session['user']}, {criterio:campo}]}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}, {criterio:campo}]}]})
+        count = tabla_estudios.count_documents({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
+                                               '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]})
         total_pages = ceil(count / limit)
         mitad = ceil(total_pages/2)
-        hola = tabla_estudios.find_one({'$or': [{'$and':[{'colaboradores': session['user']}, {criterio:campo}]}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}, {criterio:campo}]}]})
+        hola = tabla_estudios.find_one({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
+                                       '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]})
         estudios = []
         pages = []
         print(hola)
@@ -712,20 +726,21 @@ def busqueda_compartida(criterio, campo):
                     c += 1
                 print(pages)
             last_id = starting_id[(page-1)*limit]['_id']
-            estudios = tabla_estudios.find({'$or': [{'$and':[{'colaboradores': session['user']}, {criterio:campo}]}, {'$and':[{'creador': session['user']}, {'compartir':{'$exists':True}}, {criterio:campo}]}], '_id': {
-                '$lte': last_id}}).sort('_id', -1).limit(limit) 
+            estudios = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {'$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}], '_id': {
+                '$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_busqueda = True
-        else: 
+        else:
             vacio_busqueda = False
-        return render_template('busqueda_compartida.html', title='Busqueda', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_busqueda = vacio_busqueda, criterio = criterio, campo = campo, count = count)
+        return render_template('busqueda_compartida.html', title='Busqueda', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_busqueda=vacio_busqueda, criterio=criterio, campo=campo, count=count)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/nuevo-examen', methods=['GET', 'POST'])
 def new_examen():
     if 'user' in session:
-        form = ExamenForm()    
+        form = ExamenForm()
         if form.validate_on_submit():
             examen = {
                 'nombre': form.nombre_examen.data.upper(),
@@ -733,20 +748,24 @@ def new_examen():
                 'tarifa': form.tarifa.data
             }
             tabla_examenes.insert_one(examen)
-            flash('Paquete creado satisfactoriamente', 'success')
-        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
+            flash('Examen creado satisfactoriamente', 'success')
+        examenes = tabla_examenes.find(
+            {'creador': session['user']}).sort("nombre", 1)
         form.nombre_examen.data = ''
         form.tarifa.data = 0
-        return render_template('examen.html', title='Examenes', control_center=True, css=True, form = form, examenes = examenes)
+        return render_template('examen.html', title='Examenes', control_center=True, css=True, form=form, examenes=examenes)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/nuevo-paquete', methods=['GET', 'POST'])
 def new_paquete():
     if 'user' in session:
-        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
+        examenes = tabla_examenes.find(
+            {'creador': session['user']}).sort("nombre", 1)
         form = PaqueteForm()
-        form.l_examenes.choices=[(examen['nombre'], examen['nombre']) for examen in examenes]    
+        form.l_examenes.choices = [
+            (examen['nombre'], examen['nombre']) for examen in examenes]
         if form.validate_on_submit():
             paquete = {
                 'nombre': form.nombre_paquete.data.upper(),
@@ -757,20 +776,25 @@ def new_paquete():
             tabla_paquetes.insert_one(paquete)
             flash('Paquete creado satisfactoriamente', 'success')
         form.nombre_paquete.data = ''
-        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form = form)
+        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form=form)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/nueva-empresa', methods=['GET', 'POST'])
 def new_empresa():
     if 'user' in session:
-        examenes =tabla_examenes.find({'creador':session['user']}).sort("nombre", 1)
-        paquetes = tabla_paquetes.find({'creador':session['user']}).sort("nombre", 1)
+        examenes = tabla_examenes.find(
+            {'creador': session['user']}).sort("nombre", 1)
+        paquetes = tabla_paquetes.find(
+            {'creador': session['user']}).sort("nombre", 1)
         form = EmpresaForm()
-        form.l_paquetes.choices=[(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
-        form.l_examenes.choices=[(examen['nombre'], examen['nombre']) for examen in examenes]   
+        form.l_paquetes.choices = [
+            (paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+        form.l_examenes.choices = [
+            (examen['nombre'], examen['nombre']) for examen in examenes]
         if form.validate_on_submit():
-            empresa ={
+            empresa = {
                 'nombre': form.nombre_empresa.data.upper(),
                 'paquetes': form.l_paquetes.data,
                 'examenes': form.l_examenes.data,
@@ -778,20 +802,26 @@ def new_empresa():
             }
             tabla_empresas.insert_one(empresa)
             flash('Empresa creada satisfactoriamente', 'success')
-        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form = form)
+        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form=form)
     else:
         return redirect(url_for('login'))
+
+
 @app.route('/paquetes', methods=['GET', 'POST'])
 def paquetes():
     if 'user' in session:
-        paquetes = tabla_paquetes.find({'creador': session['user']}).sort("_id", -1)
-        return render_template('paquetes.html', title= 'Paquetes', control_center = True, css = True, paquetes = paquetes)
+        paquetes = tabla_paquetes.find(
+            {'creador': session['user']}).sort("_id", -1)
+        return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes)
     else:
         return redirect(url_for('login'))
+
+
 @app.route('/empresas', methods=['GET', 'POST'])
 def empresas():
     if 'user' in session:
-        empresas = tabla_empresas.find({'creador': session['user']}).sort("_id", -1)
-        return render_template('empresas.html', title= 'Empresas', control_center = True, css = True, empresas = empresas)
+        empresas = tabla_empresas.find(
+            {'creador': session['user']}).sort("_id", -1)
+        return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas)
     else:
         return redirect(url_for('login'))

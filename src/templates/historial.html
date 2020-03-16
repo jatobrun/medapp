@@ -2,46 +2,46 @@
 
 {% if vacio_historial %}
 <div class="media content-section animated bounceInDown fast">
-    <div class ="article-metadata">
+    <div class="article-metadata">
         <h3>Upss no tienes estudios disponibles porfavor ingresa uno!</h3>
         <a class="nav-item nav-link btn btn-success" href="{{url_for('new')}}">Nuevo Estudio</a>
     </div>
 
 </div>
 {% else %}
-<div class = 'content-section animated bounceInDown fast'>
-<div class = "media content-section">
-    <form method="POST" action="" enctype='multipart/form-data'>
+<div class='content-section animated bounceInDown fast'>
+    <div class="media content-section">
+        <form method="POST" action="" enctype='multipart/form-data'>
 
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.criterio.label(class="form-control-label") }} {% if
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.criterio.label(class="form-control-label") }} {% if
       form.criterio.errors %} {{ form.criterio(class="form-control
       form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.criterio.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% else %} {{ form.criterio(class="form-control form-control-lg") }} {%
+                <div class="invalid-feedback">
+                    {% for error in form.criterio.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.criterio(class="form-control form-control-lg") }} {%
       endif %}
-        </div>
-        <div class="form-group">
-         {% if form.campo.errors %} {{ form.campo(class="form-control form-control-lg
+            </div>
+            <div class="form-group">
+                {% if form.campo.errors %} {{ form.campo(class="form-control form-control-lg
       is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.campo.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% else %} {{ form.campo(class="form-control form-control-lg") }} {%
+                <div class="invalid-feedback">
+                    {% for error in form.campo.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.campo(class="form-control form-control-lg") }} {%
       endif %}
-        </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
-    </form>
-</div>
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
 </div>
 {%for estudio in estudios%}
 
@@ -53,14 +53,15 @@
         <div class="article-metadata">
             <h2><a class="article-title" href="{{ url_for('estudio', _id = estudio._id) }}">{{ estudio.titulo }}</a>
             </h2>
-            Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a>    Edad: {{estudio.edad}}</br>
+            Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a> Edad:
+            {{estudio.edad}}</br>
             Doctor: <a class="mr-2" href="#">{{ estudio.apellido_doctor+' '+estudio.nombre_doctor}}</a></br>
             {% if estudio.colaboradores != 'nada' %}
             Compartido con: <a class="mr-2" href="#">{{ estudio.colaboradores }}</a></br>
             {% endif %}
             Fecha: <a class="mr-2" href="#">{{ estudio.fecha }}</a></br>
         </div>
-        <div class ="article-metadata">
+        <div class="article-metadata">
             <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
                 href="{{ url_for('actualizar_estudio', _id=estudio._id) }}">Actualizar</a>
             <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"

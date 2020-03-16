@@ -9,39 +9,39 @@
                     {{ form.nombre_paquete.label(class="form-control-label") }}
                     {% if form.nombre_paquete.errors %} {{ form.nombre_paquete(class="form-control form-control-lg
              is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in form.nombre_paquete.errors %}
-                       <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-                   {% else %} {{ form.nombre_paquete(class="form-control form-control-lg") }} {%
+                    <div class="invalid-feedback">
+                        {% for error in form.nombre_paquete.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.nombre_paquete(class="form-control form-control-lg") }} {%
              endif %}
-               </div>
-               <div class="form-group">
-                {{ form.l_examenes.label(class="form-control-label") }}
-                {% if form.l_examenes.errors %} {{ form.l_examenes(class="form-control form-control-lg
+                </div>
+                <div class="form-group">
+                    {{ form.l_examenes.label(class="form-control-label") }}
+                    {% if form.l_examenes.errors %} {{ form.l_examenes(class="form-control form-control-lg
          is-invalid") }}
-               <div class="invalid-feedback">
-                   {% for error in form.l_examenes.errors %}
-                   <span>{{ error }}</span>
-                   {% endfor %}
-               </div>
-               {% else %} {{ form.l_examenes(class="form-control form-control-lg") }} {%
+                    <div class="invalid-feedback">
+                        {% for error in form.l_examenes.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.l_examenes(class="form-control form-control-lg") }} {%
          endif %}
-           </div>
-           <div class="form-group">
-            {{ form.tarifa.label(class="form-control-label") }}
-            {% if form.tarifa.errors %} {{ form.tarifa(class="form-control form-control-lg
+                </div>
+                <div class="form-group">
+                    {{ form.tarifa.label(class="form-control-label") }}
+                    {% if form.tarifa.errors %} {{ form.tarifa(class="form-control form-control-lg
      is-invalid") }}
-           <div class="invalid-feedback">
-               {% for error in form.tarifa.errors %}
-               <span>{{ error }}</span>
-               {% endfor %}
-           </div>
-           {% else %} {{ form.tarifa(class="form-control form-control-lg") }} {%
+                    <div class="invalid-feedback">
+                        {% for error in form.tarifa.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.tarifa(class="form-control form-control-lg") }} {%
      endif %}
-       </div>
-               <!-- <p class="form-control-label">Tus colaboradores</p>
+                </div>
+                <!-- <p class="form-control-label">Tus colaboradores</p>
                <div align="justify" class = "media content-section animated fadeInUp ">
                    
                    {% if vacio_colaboradores %}    
@@ -58,5 +58,5 @@
             </div>
         </form>
     </div>
-    </div>
+</div>
 {% endblock %}
