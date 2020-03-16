@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block body %}
+{% extends 'base1.html' %} {% block body %}
 <div class="content-section animated fadeInUp ">
   <form method="POST" action="">
     {{ form.hidden_tag() }}
@@ -59,7 +59,7 @@
     </div>
   </form>
 </div>
-<div class="border-top pt-3 animated bounceInUp slow">
+<div>
   <small class="text-muted">
     Ya tienes cuenta?
     <a class="ml-2" href="{{ url_for('login') }}">Inicia Sesion</a>
