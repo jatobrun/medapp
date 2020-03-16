@@ -91,7 +91,7 @@ def historial():
         form = Buscador2Form()
         if form.validate_on_submit():
             return redirect(url_for('busqueda', campo = form.campo.data, criterio = form.criterio.data))
-        return render_template('historial.html', title='Historial Clinico', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial = vacio_historial, form = form)
+        return render_template('historial.html', title='Estudios', control_center=True, estudios=estudios, css=True, pages=pages, current_page=page, vacio_historial = vacio_historial, form = form)
     else:
         return redirect(url_for('login'))
 
