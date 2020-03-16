@@ -6,6 +6,18 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4"></legend>{{legend}}</legend>
             <div class="form-group">
+                {{form.paquete.label(class="form-control-label")}} {% if
+            form.paquete.errors %} {{ form.paquete(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.paquete.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.paquete(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
                 {{form.titulo.label(class="form-control-label")}} {% if
           form.titulo.errors %} {{ form.titulo(class="form-control
           form-control-lg is-invalid") }}
@@ -78,6 +90,18 @@
             endif %}
             </div>
             <div class="form-group">
+                {{form.colaborador.label(class="form-control-label")}}{% if
+            form.colaborador.errors %} {{ form.colaborador(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.colaborador.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.colaborador(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
                 {{form.nombre_doctor.label(class="form-control-label")}} {% if
             form.nombre_doctor.errors %} {{ form.nombre_doctor(class="form-control
             form-control-lg is-invalid") }}
@@ -90,28 +114,17 @@
             endif %}
             </div>
             <div class="form-group">
-                {{form.apellido_doctor.label(class="form-control-label")}} {% if
-            form.apellido_doctor.errors %} {{ form.apellido_doctor(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.apellido_doctor.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+                <div>{{form.contenido.label(class="form-control-label")}}
+                    <button onclick="contenido()">▼</button>
                 </div>
-                {% else %} {{ form.apellido_doctor(class="form-control form-control-lg") }} {%
-            endif %}
-            </div>
-            <div class="form-group">
-                {{form.contenido.label(class="form-control-label")}} {% if
-            form.contenido.errors %} {{ form.contenido(class="form-control
-            form-control-lg is-invalid") }}
+                {% if form.contenido.errors %} 
+                {{ form.contenido(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.contenido.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
-                {% else %} {{ form.contenido(class="form-control form-control-lg") }} {%
-            endif %}
+                 {% endif %}
             </div>
             <div class="form-group">
                 {{form.diagnostico.label(class="form-control-label")}} {% if
@@ -224,4 +237,5 @@
         </div>
     </form>
 </div>
+<script>{{"url_for('static', 'main.js')"}}</script>
 {% endblock %}

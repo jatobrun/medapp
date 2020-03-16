@@ -19,11 +19,11 @@ class ColaboradoresForm(FlaskForm):
 
 class Registration_Form(FlaskForm):
     username = StringField('Usuario', validators=[
-                           DataRequired(), Length(min=6, max=20)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Contraseña', validators=[DataRequired()])
+                           DataRequired(message = 'Ingrese un usuario porfavor'), Length(min=6, max=20, message='El usuario debe tener minimo 6 caracteres')])
+    email = StringField('Email', validators=[DataRequired(message='Ingrese un email porfavor'), Email(message='No es un correo valido ')])
+    password = PasswordField('Contraseña', validators=[DataRequired(message='Ingrese una contraseña porfavor')])
     confirm_password = PasswordField('Confirme Contraseña', validators=[
-                                     DataRequired(), EqualTo('password')])
+                                     DataRequired(message = 'Confirme su contraseña porfavor'), EqualTo('password', message = 'Las contraseñas ingresadas no son las mismas')])
     submit = SubmitField('Ingrese')
 
     def validate_username(self, username):
@@ -71,22 +71,22 @@ class UpdateAccount_Form(FlaskForm):
 
 
 class PostForm(FlaskForm):
+    paquete = SelectField('Escoge un paquete')
     titulo = StringField('Examen realizado:')
     cedula = IntegerField('Cedula:')
-    empresa = StringField('Empresa si aplica:')
+    empresa = SelectField('Empresa:')
+    colaborador = SelectField('Area:')
     nombre_paciente = StringField(
         'Nombre del paciente:')
     apellido_paciente = StringField(
         'Apellido del paciente:')
     edad = IntegerField('Edad del paciente:')
     nombre_doctor = StringField(
-        'Nombre del doctor:')
-    apellido_doctor = StringField(
-        'Apellido del doctor:')
+        'Nombre Completo Del Doctor:')
     contenido = TextAreaField('Sintomas:')
     diagnostico = TextAreaField('Diagnostico Presuntivo:')
     comentarios = TextAreaField('Comentarios/Sugerencias:')
-    archivo1 = MultipleFileField('Radiografia 1', validators=[
+    archivo1 = FileField('Radiografia 1', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
     archivo2 = FileField('Radiografia 2', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])

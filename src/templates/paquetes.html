@@ -15,7 +15,7 @@
         <div class="article-metadata">
             <h2 class="article-title">{{ paquete.nombre }}</h2>
             <a class='btn btn-secondary btn-sm mt-1 mb-1 mr-2 p-2'
-                href="#">Actualizar</a>
+                href="{{url_for('actualizar_paquete', _id = paquete._id)}}">Actualizar</a>
             <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"
                 data-target="#deleteModal">Borrar</button>
         </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <form action="#}" method="POST">
+                <form action="{{url_for('borrar_paquete', _id = paquete._id)}}" method="POST">
                     <input class="btn btn-danger" type="submit" value="Borrar">
                 </form>
             </div>
