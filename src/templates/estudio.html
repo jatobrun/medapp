@@ -3,7 +3,6 @@
     <img class='rounded-circle article-img' src="{{ url_for('static', filename='profile-pic/'+creador.image) }}">
     <div class="media-body">
         <div >
-            <h2 class='article-title'>{{ estudio.titulo }}</h2>
             Paciente: <a class="mr-2" href="#">{{estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a></br>
             Edad: <a class="mr-2" href="#">{{estudio.edad}}</a></br>
             Empresa: <a class="mr-2" href="#">{{estudio.empresa}}</a></br>
@@ -34,10 +33,14 @@
                 {% endif %}
                 </form>
         </div>
-	{% endif %}
+    {% endif %}
+    <div class="article-metadata">
+        <h2 class="article-title">Examenes</h2>    
+<p class="article-content">{%for examen in examenes %}{{examen+' - '}} {% endfor %}</p>
+    </div>
         <div class="article-metadata">
             <h2 class="article-title"> Contenido</h2>    
-	<p class="article-content">{% if form %}{{'Sintomas: '+ estudio.contenido+'\n'}}{% endif %}{{'Diagnostico: '+ estudio.diagnostico+'\n'+'Comentarios: '+ estudio.comentarios}}</p>
+	<p class="article-content">{% if form %}{{'Sintomas: '+ estudio.contenido+'\n'}}{% endif %}{{'Diagnostico: '+ estudio.diagnostico+'\n'+'Examenes no Realizados:'+estudio['examen-no-realizado']+'\n'+'Comentarios: '+ estudio.comentarios}}</p>
         </div>
         <h2 class="article-title">Archivos</h2>
         {% for archivo in estudio.archivos %}

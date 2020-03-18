@@ -103,6 +103,8 @@ def new():
         empresas = tabla_empresas.find({'creador': session['user']})
         paquetes = tabla_paquetes.find({'creador': session['user']})
         creador = tabla_usuarios.find_one({'usuario': session['user']})
+        examenes = tabla_examenes.find({'creador': session['user']})
+        form.titulo.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
         form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
         form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
         form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
@@ -173,11 +175,15 @@ def new():
             else:
                 archivo9 = 'nada'
                 f_ext9 = '.'
+            if form.colaborador.data !='nada':
+                compartido = 'compartido'
+            else:
+                compartido = 'nocompartido'
             estudio = {
                 'usuario': session['user'],
                 'creador': session['user'],
                 'creador-imagen': session['image'],
-                'titulo': form.titulo.data.upper(),
+                'titulo': form.titulo.data,
                 'nombre_paciente': form.nombre_paciente.data.upper(),
                 'apellido_paciente': form.apellido_paciente.data.upper(),
                 'edad': form.edad.data,
@@ -187,13 +193,15 @@ def new():
                 'paquete':form.paquete.data.upper(),
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
+                'examen-no-realizado': form.noExamen.data.upper(),
                 'comentarios': form.comentarios.data,
                 'fecha': time.strftime("%d-%m-%Y"),
                 'archivos': [(archivo1, '1', f_ext1), (archivo2, '2', f_ext2), (archivo3, '3', f_ext3), (archivo4, '4', f_ext4), (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8), (archivo9, '9', f_ext9)],
                 'token': token,
                 'n_radiografia': n_radiografias,
                 'n_tomografia': n_tomografias,
-                'colaboradores': form.colaborador.data
+                'colaboradores': form.colaborador.data,
+                'compartir': compartido
             }
             tabla_estudios.insert_one(estudio)
             flash('Estudio registrado correctamente', 'success')
@@ -254,6 +262,12 @@ def register():
             register.password.data).decode('utf-8')
         usuario = {'usuario': register.username.data,
                    'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada']}
+        
+        examen = {
+            'nombre': 'ninguno'.upper(),
+            'creador': register.username.data,
+            'tarifa': 0
+            }
         paquete = {
             'nombre': 'ninguno'.upper(),
             'creador': register.username.data,
@@ -266,6 +280,7 @@ def register():
             'examenes': 'ninguno',
             'creador': register.username.data
         }
+        tabla_examenes.insert_one(examen)
         tabla_empresas.insert_one(empresa)
         tabla_paquetes.insert_one(paquete)
         tabla_usuarios.insert_one(usuario)
@@ -358,13 +373,18 @@ def logout():
 def estudio(_id):
     estudio = tabla_estudios.find_one({'_id': ObjectId(_id)})
     creador = tabla_usuarios.find_one({'usuario': estudio['usuario']})
+    if estudio['paquete'] == 'NINGUNO' and estudio['titulo'][0] == 'NINGUNO':
+        examenes = ['NINGUNO']
+    elif estudio['paquete'] != 'NINGUNO' and estudio['titulo'][0] == 'NINGUNO':
+        examenes = tabla_paquetes.find_one({'creador': estudio['creador'], 'nombre': estudio['paquete']})['examenes']
+    elif estudio['paquete'] == 'NINGUNO' and estudio['titulo'][0] != 'NINGUNO':
+        examenes = estudio['titulo']
+
     if 'user' in session:
         if session['user'] == estudio['creador']:
             form = Add_colaboradorForm()
             form.l_colaborador.choices = [
                 (colaborador, colaborador) for colaborador in creador['colaboradores'][1:]]
-            # if form.validate_on_submit():
-            print(request.args.to_dict())
             if request.args.to_dict():
                 colaborador = request.args.to_dict()['l_colaborador']
                 tabla_estudios.update_one({'_id': ObjectId(_id)}, {
@@ -375,11 +395,10 @@ def estudio(_id):
                 sw_colab = False
             else:
                 sw_colab = True
-            print(sw_colab, contador, creador['colaboradores'])
-            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form=form, sw_colab=sw_colab)
-        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True)
+            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form=form, sw_colab=sw_colab, examenes = examenes)
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, examenes = examenes)
     else:
-        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=False, creador=creador, css=True)
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=False, creador=creador, css=True, examenes = examenes )
 
 
 @app.route("/historial/<_id>/update", methods=['GET', 'POST'])
@@ -389,6 +408,8 @@ def actualizar_estudio(_id):
     empresas = tabla_empresas.find({'creador': session['user']})
     paquetes = tabla_paquetes.find({'creador': session['user']})
     creador = tabla_usuarios.find_one({'usuario': session['user']})
+    examenes = tabla_examenes.find({'creador': session['user']})
+    form.titulo.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
     form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
     form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
     form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
@@ -477,7 +498,7 @@ def actualizar_estudio(_id):
                 n_radiografias += 1
         cambios = {
             'usuario': session['user'],
-            'titulo': form.titulo.data.upper(),
+            'titulo': form.titulo.data,
             'nombre_paciente': form.nombre_paciente.data.upper(),
             'apellido_paciente': form.apellido_paciente.data.upper(),
             'cedula': form.cedula.data,
@@ -487,6 +508,7 @@ def actualizar_estudio(_id):
             'nombre_doctor': form.nombre_doctor.data.upper(),
             'contenido': form.contenido.data,
             'diagnostico': form.diagnostico.data,
+            'examen-no-realizado': form.noExamen.data,
             'comentarios': form.comentarios.data,
             'fecha': time.strftime("%d-%m-%Y"),
             'archivos': archivos,
@@ -495,7 +517,7 @@ def actualizar_estudio(_id):
             'colaboradores': form.colaborador.data
         }
         tabla_estudios.update_one(
-            {'usuario': session['user']}, {'$set': cambios})
+            {'usuario': estudio['creador'], '_id': estudio['_id']}, {'$set': cambios})
         flash('Cambios Realizados Satisfactoriamente!', 'success')
         return redirect(url_for('estudio', _id=estudio['_id']))
     elif request.method == 'GET':
@@ -510,6 +532,7 @@ def actualizar_estudio(_id):
         form.diagnostico.data = estudio['diagnostico']
         form.nombre_doctor.data = estudio['nombre_doctor']
         form.nombre_paciente.data = estudio['nombre_paciente']
+        form.noExamen.data = estudio['examen-no-realizado']
         form.titulo.data = estudio['titulo']
         form.archivo1.data = estudio['archivos'][0][0]
         form.archivo2.data = estudio['archivos'][1][0]
@@ -638,13 +661,13 @@ def estudios_compartidos():
         limit = 10
         page = request.args.get('page', 1, type=int)
         starting_id = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and': [
-                                          {'creador': session['user']}, {'compartir': {'$exists': True}}]}]}).sort('_id', -1)
+                                          {'creador': session['user']}, {'compartir': 'compartido'}]}]}).sort('_id', -1)
         count = tabla_estudios.count_documents({'$or': [{'colaboradores': session['user']}, {
-                                               '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}]}]})
+                                               '$and': [{'creador': session['user']}, {'compartir': 'compartido'}]}]})
         total_pages = ceil(count / limit)
         mitad = ceil(total_pages/2)
         hola = tabla_estudios.find_one({'$or': [{'colaboradores': session['user']}, {
-                                       '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}]}]})
+                                       '$and': [{'creador': session['user']}, {'compartir': 'compartido'}]}]})
         estudios = []
         pages = []
         if hola:
@@ -685,7 +708,7 @@ def estudios_compartidos():
                 print(pages)
             last_id = starting_id[(page-1)*limit]['_id']
             estudios = tabla_estudios.find({'$or': [{'colaboradores': session['user']}, {'$and': [{'creador': session['user']}, {
-                                           'compartir': {'$exists': True}}]}], '_id': {'$lte': last_id}}).sort('_id', -1).limit(limit)
+                                           'compartir': 'compartido'}]}], '_id': {'$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_historial = True
         else:
@@ -705,14 +728,14 @@ def busqueda_compartida(criterio, campo):
         if criterio == 'edad' or criterio == 'cedula':
             campo = int(campo)
         starting_id = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
-                                          '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]}).sort('_id', -1)
+                                          '$and': [{'creador': session['user']}, {'compartir': 'compartido'}, {criterio: campo}]}]}).sort('_id', -1)
         page = request.args.get('page', 1, type=int)
         count = tabla_estudios.count_documents({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
-                                               '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]})
+                                               '$and': [{'creador': session['user']}, {'compartir': 'compartido'}, {criterio: campo}]}]})
         total_pages = ceil(count / limit)
         mitad = ceil(total_pages/2)
         hola = tabla_estudios.find_one({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {
-                                       '$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}]})
+                                       '$and': [{'creador': session['user']}, {'compartir': 'compartido'}, {criterio: campo}]}]})
         estudios = []
         pages = []
         print(hola)
@@ -754,7 +777,7 @@ def busqueda_compartida(criterio, campo):
                     c += 1
                 print(pages)
             last_id = starting_id[(page-1)*limit]['_id']
-            estudios = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {'$and': [{'creador': session['user']}, {'compartir': {'$exists': True}}, {criterio: campo}]}], '_id': {
+            estudios = tabla_estudios.find({'$or': [{'$and': [{'colaboradores': session['user']}, {criterio: campo}]}, {'$and': [{'creador': session['user']}, {'compartir': 'compartido'}, {criterio: campo}]}], '_id': {
                 '$lte': last_id}}).sort('_id', -1).limit(limit)
         if not(estudios):
             vacio_busqueda = True

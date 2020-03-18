@@ -6,6 +6,66 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4"></legend>{{legend}}</legend>
             <div class="form-group">
+                {{form.apellido_paciente.label(class="form-control-label")}} {% if
+            form.apellido_paciente.errors %} {{ form.apellido_paciente(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.apellido_paciente.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.apellido_paciente(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
+                {{form.nombre_paciente.label(class="form-control-label")}} {% if
+          form.nombre_paciente.errors %} {{ form.nombre_paciente(class="form-control
+          form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.nombre_paciente.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.nombre_paciente(class="form-control form-control-lg") }} {%
+          endif %}
+            </div>
+            <div class="form-group">
+                {{form.cedula.label(class="form-control-label")}} {% if
+            form.cedula.errors %} {{ form.cedula(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.cedula.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.cedula(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
+                {{form.edad.label(class="form-control-label")}}{% if
+            form.edad.errors %} {{ form.edad(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.edad.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.edad(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
+                {{form.empresa.label(class="form-control-label")}} {% if
+            form.empresa.errors %} {{ form.empresa(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.empresa.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.empresa(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
                 {{form.paquete.label(class="form-control-label")}} {% if
             form.paquete.errors %} {{ form.paquete(class="form-control
             form-control-lg is-invalid") }}
@@ -28,66 +88,6 @@
                 </div>
                 {% else %} {{ form.titulo(class="form-control form-control-lg") }} {%
           endif %}
-            </div>
-            <div class="form-group">
-                {{form.nombre_paciente.label(class="form-control-label")}} {% if
-          form.nombre_paciente.errors %} {{ form.nombre_paciente(class="form-control
-          form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.nombre_paciente.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.nombre_paciente(class="form-control form-control-lg") }} {%
-          endif %}
-            </div>
-            <div class="form-group">
-                {{form.apellido_paciente.label(class="form-control-label")}} {% if
-            form.apellido_paciente.errors %} {{ form.apellido_paciente(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.apellido_paciente.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.apellido_paciente(class="form-control form-control-lg") }} {%
-            endif %}
-            </div>
-            <div class="form-group">
-                {{form.cedula.label(class="form-control-label")}} {% if
-            form.cedula.errors %} {{ form.cedula(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.cedula.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.cedula(class="form-control form-control-lg") }} {%
-            endif %}
-            </div>
-            <div class="form-group">
-                {{form.empresa.label(class="form-control-label")}} {% if
-            form.empresa.errors %} {{ form.empresa(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.empresa.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.empresa(class="form-control form-control-lg") }} {%
-            endif %}
-            </div>
-            <div class="form-group">
-                {{form.edad.label(class="form-control-label")}}{% if
-            form.edad.errors %} {{ form.edad(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.edad.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.edad(class="form-control form-control-lg") }} {%
-            endif %}
             </div>
             <div class="form-group">
                 {{form.colaborador.label(class="form-control-label")}}{% if
@@ -114,17 +114,16 @@
             endif %}
             </div>
             <div class="form-group">
-                <div>{{form.contenido.label(class="form-control-label")}}
-                    <button onclick="contenido()">▼</button>
-                </div>
-                {% if form.contenido.errors %} 
-                {{ form.contenido(class="form-control form-control-lg is-invalid") }}
+                {{form.contenido.label(class="form-control-label")}} {% if
+            form.contenido.errors %} {{ form.contenido(class="form-control
+            form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.contenido.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
-                 {% endif %}
+                {% else %} {{ form.contenido(class="form-control form-control-lg") }} {%
+            endif %}
             </div>
             <div class="form-group">
                 {{form.diagnostico.label(class="form-control-label")}} {% if
@@ -136,6 +135,18 @@
                     {% endfor %}
                 </div>
                 {% else %} {{ form.diagnostico(class="form-control form-control-lg") }} {%
+            endif %}
+            </div>
+            <div class="form-group">
+                {{form.noExamen.label(class="form-control-label")}} {% if
+            form.noExamen.errors %} {{ form.noExamen(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.noExamen.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.noExamen(class="form-control form-control-lg") }} {%
             endif %}
             </div>
             <div class="form-group">

@@ -51,7 +51,7 @@
         src="{{ url_for('static', filename='profile-pic/'+estudio['creador-imagen']) }}">
     <div class="media-body">
         <div class="article-metadata">
-            <h2><a class="article-title" href="{{ url_for('estudio', _id = estudio._id) }}">{{ estudio.titulo }}</a>
+            <h2><a class="article-title" href="{{ url_for('estudio', _id = estudio._id) }}">{{ estudio.token }}</a>
             </h2>
             Paciente: <a class="mr-2" href="#">{{ estudio.apellido_paciente+' '+estudio.nombre_paciente}}</a> Edad:
             {{estudio.edad}}</br>
@@ -68,9 +68,9 @@
             <button type="button" class='btn btn-danger btn-sm mt-1 mb-1 ml-1 p-2' data-toggle="modal"
                 data-target="#deleteModal">Borrar</button>
         </div>
-        <div>
+        <!-- <div>
             <h5>Clave del estudio:<a href="{{url_for('estudio', _id=estudio._id)}}"> {{estudio.token}}</a></h5>
-        </div>
+        </div> -->
     </div>
 </article>
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"

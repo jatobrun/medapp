@@ -72,7 +72,8 @@ class UpdateAccount_Form(FlaskForm):
 
 class PostForm(FlaskForm):
     paquete = SelectField('Escoge un paquete')
-    titulo = StringField('Examen realizado:')
+    titulo = SelectMultipleField('Examen(es) a realizar:')
+    noExamen = StringField('Ingrese los examenes no realizados:')
     cedula = IntegerField('Cedula:')
     empresa = SelectField('Empresa:')
     colaborador = SelectField('Area:')
