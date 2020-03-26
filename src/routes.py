@@ -368,7 +368,6 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-
 @app.route("/historial/<_id>", methods=['GET', 'POST'])
 def estudio(_id):
     estudio = tabla_estudios.find_one({'_id': ObjectId(_id)})
