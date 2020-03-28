@@ -17,7 +17,7 @@
                     {% else %} {{ form.nombre_paquete(class="form-control form-control-lg") }} {%
              endif %}
                 </div>
-                <div class="form-group">
+                <div class="">
                     {{ form.l_examenes.label(class="form-control-label") }}
                     {% if form.l_examenes.errors %} {{ form.l_examenes(class="form-control form-control-lg
          is-invalid") }}
@@ -26,7 +26,7 @@
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
-                    {% else %} {{ form.l_examenes(class="form-control form-control-lg") }} {%
+                    {% else %} {{ form.l_examenes(style="list-style: none; padding-inline-start: 20px;") }} {%
          endif %}
                 </div>
                 <div class="form-group">
