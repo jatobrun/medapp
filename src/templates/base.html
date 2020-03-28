@@ -11,7 +11,7 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <!-- CSS Stylesheet-->
   {% if css %}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main1.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main2.css') }}">
   {% else %}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
   {% endif %}
@@ -74,33 +74,47 @@
       <div class="col-md-4">
         <div class="content-section sticky-top">
           <h3 align='center'>Panel De Control</h3>
-
           <ul class="list-group">
             <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('new_examen')}}">Examenes</a></li>
+                href="{{url_for('perfil')}}">Perfil</a>
+            </li>
             <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('index')}}">Notificaciones</a></li>
-                
+                href="{{url_for('colaboradores')}}">Areas</a>
+            </li>
+            <li class="list-group-item list-group-item-light dropdpwn-menu">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Estudios
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="nav-item nav-link" href="{{url_for('historial')}}">Estudios</a>
+                <a class="nav-item nav-link" href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a>
+              </div>
+            </li>
+            <li class="list-group-item list-group-item-light dropdpwn-menu">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Examenes
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="nav-item nav-link" href="{{url_for('new_examen')}}">Examenes</a>
+                <a class="nav-item nav-link" href="{{url_for('paquetes')}}">Paquete de Examenes</a>
+              </div>
+            </li>
             <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('perfil')}}">Perfil</a></li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('colaboradores')}}">Areas</a></li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('historial')}}">Estudios</a></li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a></li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('empresas')}}">Empresas</a></li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('paquetes')}}">Paquetes</a></li>
-            <li class="list-group-item list-group-item-light"><a class='nav-item nav-link'
-                href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a></li>
+                href="{{url_for('empresas')}}">Empresas</a>
+            </li>
+            <li class="list-group-item list-group-item-light">
+              <a class='nav-item nav-link' href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a>
+            </li>
+            <li class="list-group-item list-group-item-light">
+              <a class="nav-item nav-link" href="{{url_for('index')}}">Notificaciones</a>
+            </li>
             <!-- <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('consulta')}}">Consulta Virtual</a></li>
-              <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+                <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('ia')}}">IA</a></li> -->
           </ul>
-
         </div>
       </div>
       {% endif %}
