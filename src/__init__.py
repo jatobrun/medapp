@@ -8,7 +8,8 @@ import cloudinary as Cloud
 #from flask_login import LoginManager
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c81dac792846c247acb200f1b0a7eab4'
-client = MongoClient("mongodb+srv://jatobrun:jatobrun@cluster0-hx8rh.mongodb.net/test?retryWrites=true&w=majority")
+client = MongoClient(
+    "mongodb+srv://jatobrun:jatobrun@cluster0-hx8rh.mongodb.net/test?retryWrites=true&w=majority")
 #client = MongoClient("mongodb://localhost:2717")
 db = client['MedScan']
 tabla_usuarios = db['Usuarios']
@@ -18,9 +19,9 @@ tabla_paquetes = db['Paquetes']
 tabla_empresas = db['Empresas']
 bcrypt = Bcrypt(app)
 Cloud.config(
-    cloud_name= "dscvja8yk",
-    api_key= "134245124854917",
-    api_secret='N8mD3-3nLFVjItRfM_oexclt35I' 
+    cloud_name="dscvja8yk",
+    api_key="134245124854917",
+    api_secret='N8mD3-3nLFVjItRfM_oexclt35I'
 )
 #login_manager = LoginManager(app)
 from src import routes
