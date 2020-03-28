@@ -4,7 +4,8 @@ import time
 import secrets
 from flask import render_template, flash, redirect, url_for, session, request
 from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form, PaqueteForm, EmpresaForm, ExamenForm
-from src import app, bcrypt, tabla_estudios, tabla_usuarios, tabla_examenes, tabla_paquetes, tabla_empresas
+from src import app, bcrypt, tabla_estudios, tabla_usuarios, tabla_examenes, tabla_paquetes, tabla_empresas, Cloud
+import cloudinary.uploader as uploader
 # from flask_login import current_user, login_user
 from bson.objectid import ObjectId
 from math import ceil
@@ -312,6 +313,7 @@ def save_picture(form_picture, resize=True, tomografia=False):
         picture_path = os.path.join(
             app.root_path, 'static/estudio-pic', picture_fn)
         form_picture.save(picture_path)
+        uploader.upload(picture_path)
     return picture_fn, f_ext
 
 
