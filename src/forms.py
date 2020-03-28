@@ -8,22 +8,25 @@ from flask import session
 
 class ColaboradoresForm(FlaskForm):
     colaborador = StringField(
-        'Agrega un colaborador')
+        'Ingresa el usuario el cual deseas agregar:')
     revisar = SubmitField('Revisar colaborador')
 
     def validate_colaborador(self, colaborador):
         user = tabla_usuarios.find_one({'usuario': colaborador.data})
         if not(user):
-            raise ValidationError('Este usuario no existe. Porfavor ingrese otro.')
+            raise ValidationError(
+                'Este usuario no existe. Porfavor ingrese otro.')
 
 
 class Registration_Form(FlaskForm):
     username = StringField('Usuario', validators=[
-                           DataRequired(message = 'Ingrese un usuario porfavor'), Length(min=6, max=20, message='El usuario debe tener minimo 6 caracteres')])
-    email = StringField('Email', validators=[DataRequired(message='Ingrese un email porfavor'), Email(message='No es un correo valido ')])
-    password = PasswordField('Contraseña', validators=[DataRequired(message='Ingrese una contraseña porfavor')])
+                           DataRequired(message='Ingrese un usuario porfavor'), Length(min=6, max=20, message='El usuario debe tener minimo 6 caracteres')])
+    email = StringField('Email', validators=[DataRequired(
+        message='Ingrese un email porfavor'), Email(message='No es un correo valido ')])
+    password = PasswordField('Contraseña', validators=[
+                             DataRequired(message='Ingrese una contraseña porfavor')])
     confirm_password = PasswordField('Confirme Contraseña', validators=[
-                                     DataRequired(message = 'Confirme su contraseña porfavor'), EqualTo('password', message = 'Las contraseñas ingresadas no son las mismas')])
+                                     DataRequired(message='Confirme su contraseña porfavor'), EqualTo('password', message='Las contraseñas ingresadas no son las mismas')])
     submit = SubmitField('Ingrese')
 
     def validate_username(self, username):
@@ -51,7 +54,7 @@ class UpdateAccount_Form(FlaskForm):
     username = StringField('Usuario', validators=[
                            DataRequired(), Length(min=6, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    picture = FileField('Actualiza tu foto de perfil',
+    picture = FileField('Actualizar la foto',
                         validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar')
 
@@ -105,19 +108,27 @@ class PostForm(FlaskForm):
         FileAllowed(['DCM', 'jpg', 'png', 'dcm'])])
     archivo9 = FileField('Archivos varios', validators=[FileAllowed(['pdf'])])
     submit = SubmitField('Agregar Estudio')
-    
+
+
 class BuscadorForm(FlaskForm):
-    token = StringField('Ingrese el codigo de tu estudio', validators=[DataRequired()])
+    token = StringField('Ingrese el codigo de tu estudio',
+                        validators=[DataRequired()])
     submit = SubmitField('Buscar estudio')
+
     def validate_token(self, token):
         estudio_token = tabla_estudios.find_one({'token': token.data})
         if not(estudio_token):
-            raise ValidationError('Esta clave no existe. Porfavor ingrese otra.')
+            raise ValidationError(
+                'Esta clave no existe. Porfavor ingrese otra.')
+
 
 class Buscador2Form(FlaskForm):
-    criterio = SelectField('Buscar por:', choices=[('apellido_paciente', 'Apellido'), ('cedula', 'Cédula'), ('empresa', 'Empresa'), ('fecha', 'Fecha'), ('token', '#Estudio')])
+    criterio = SelectField('Buscar por:', choices=[('apellido_paciente', 'Apellido'), (
+        'cedula', 'Cédula'), ('empresa', 'Empresa'), ('fecha', 'Fecha'), ('token', '#Estudio')])
     campo = StringField(DataRequired())
     submit = SubmitField('Buscar')
+
+
 class Add_colaboradorForm(FlaskForm):
     l_colaborador = SelectField('Colaborador')
     submit = SubmitField('Agregar Colaborador')
@@ -127,19 +138,26 @@ class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+
 class PaqueteForm(FlaskForm):
-    nombre_paquete = StringField('Nombre del Paquete', validators=[DataRequired()])
+    nombre_paquete = StringField(
+        'Nombre del Paquete', validators=[DataRequired()])
     l_examenes = MultiCheckboxField('Examenes', validators=[DataRequired()])
     tarifa = IntegerField('Tarifa del paquete(dolares americanos)')
     submit = SubmitField('Agregar Paquete')
 
+
 class EmpresaForm(FlaskForm):
-    nombre_empresa = StringField('Nombre de la Empresa', validators=[DataRequired()])
+    nombre_empresa = StringField(
+        'Nombre de la Empresa', validators=[DataRequired()])
     l_examenes = MultiCheckboxField('Examenes', validators=[DataRequired()])
     l_paquetes = SelectMultipleField('Paquetes', validators=[DataRequired()])
     submit = SubmitField('Agregar Empresa')
 
+
 class ExamenForm(FlaskForm):
-    nombre_examen = StringField('Nombre del examen', validators=[DataRequired()])
-    tarifa = IntegerField('Tarifa del examen(dolares americanos)', validators=[DataRequired()])
+    nombre_examen = StringField(
+        'Nombre del examen', validators=[DataRequired()])
+    tarifa = IntegerField(
+        'Tarifa del examen(dolares americanos)', validators=[DataRequired()])
     submit = SubmitField('Agregar Examen')

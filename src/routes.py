@@ -104,10 +104,14 @@ def new():
         paquetes = tabla_paquetes.find({'creador': session['user']})
         creador = tabla_usuarios.find_one({'usuario': session['user']})
         examenes = tabla_examenes.find({'creador': session['user']})
-        form.titulo.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
-        form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
-        form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
-        form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+        form.titulo.choices = [(examen['nombre'], examen['nombre'])
+                               for examen in examenes]
+        form.colaborador.choices = [(colaborador, colaborador)
+                                    for colaborador in creador['colaboradores']]
+        form.empresa.choices = [
+            (empresa['nombre'], empresa['nombre']) for empresa in empresas]
+        form.paquete.choices = [
+            (paquete['nombre'], paquete['nombre']) for paquete in paquetes]
         if form.validate_on_submit():
             n_radiografias = 0
             n_tomografias = 0
@@ -175,7 +179,7 @@ def new():
             else:
                 archivo9 = 'nada'
                 f_ext9 = '.'
-            if form.colaborador.data !='nada':
+            if form.colaborador.data != 'nada':
                 compartido = 'compartido'
             else:
                 compartido = 'nocompartido'
@@ -190,7 +194,7 @@ def new():
                 'cedula': form.cedula.data,
                 'empresa': form.empresa.data.upper(),
                 'nombre_doctor': form.nombre_doctor.data.upper(),
-                'paquete':form.paquete.data.upper(),
+                'paquete': form.paquete.data.upper(),
                 'contenido': form.contenido.data,
                 'diagnostico': form.diagnostico.data,
                 'examen-no-realizado': form.noExamen.data.upper(),
@@ -262,12 +266,12 @@ def register():
             register.password.data).decode('utf-8')
         usuario = {'usuario': register.username.data,
                    'password': hashed_pass, 'email': register.email.data, 'image': 'default.jpg', 'colaboradores': ['nada']}
-        
+
         examen = {
             'nombre': 'ninguno'.upper(),
             'creador': register.username.data,
             'tarifa': 0
-            }
+        }
         paquete = {
             'nombre': 'ninguno'.upper(),
             'creador': register.username.data,
@@ -368,6 +372,7 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
+
 @app.route("/historial/<_id>", methods=['GET', 'POST'])
 def estudio(_id):
     estudio = tabla_estudios.find_one({'_id': ObjectId(_id)})
@@ -375,7 +380,8 @@ def estudio(_id):
     if estudio['paquete'] == 'NINGUNO' and estudio['titulo'][0] == 'NINGUNO':
         examenes = ['NINGUNO']
     elif estudio['paquete'] != 'NINGUNO' and estudio['titulo'][0] == 'NINGUNO':
-        examenes = tabla_paquetes.find_one({'creador': estudio['creador'], 'nombre': estudio['paquete']})['examenes']
+        examenes = tabla_paquetes.find_one(
+            {'creador': estudio['creador'], 'nombre': estudio['paquete']})['examenes']
     elif estudio['paquete'] == 'NINGUNO' and estudio['titulo'][0] != 'NINGUNO':
         examenes = estudio['titulo']
 
@@ -394,10 +400,10 @@ def estudio(_id):
                 sw_colab = False
             else:
                 sw_colab = True
-            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form=form, sw_colab=sw_colab, examenes = examenes)
-        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, examenes = examenes)
+            return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, form=form, sw_colab=sw_colab, examenes=examenes)
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=True, creador=creador, css=True, examenes=examenes)
     else:
-        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=False, creador=creador, css=True, examenes = examenes )
+        return render_template('estudio.html', title=estudio['titulo'], estudio=estudio, control_center=False, creador=creador, css=True, examenes=examenes)
 
 
 @app.route("/historial/<_id>/update", methods=['GET', 'POST'])
@@ -408,10 +414,14 @@ def actualizar_estudio(_id):
     paquetes = tabla_paquetes.find({'creador': session['user']})
     creador = tabla_usuarios.find_one({'usuario': session['user']})
     examenes = tabla_examenes.find({'creador': session['user']})
-    form.titulo.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
-    form.colaborador.choices = [(colaborador, colaborador) for colaborador in creador['colaboradores']]
-    form.empresa.choices = [(empresa['nombre'], empresa['nombre']) for empresa in empresas]
-    form.paquete.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+    form.titulo.choices = [(examen['nombre'], examen['nombre'])
+                           for examen in examenes]
+    form.colaborador.choices = [(colaborador, colaborador)
+                                for colaborador in creador['colaboradores']]
+    form.empresa.choices = [(empresa['nombre'], empresa['nombre'])
+                            for empresa in empresas]
+    form.paquete.choices = [(paquete['nombre'], paquete['nombre'])
+                            for paquete in paquetes]
     if form.validate_on_submit():
         n_radiografias = 0
         n_tomografias = 0
@@ -560,7 +570,7 @@ def borrar_estudio(_id):
 @app.route("/estadisticas/<user>/", methods=['GET', 'POST'])
 def estadisticas(user):
     if 'user' in session:
-        return render_template('estadisticas.html', title='Estadisticas', control_center=True, css = True)
+        return render_template('estadisticas.html', title='Estadisticas', control_center=True, css=True)
     else:
         return redirect(url_for('login'))
 
@@ -589,7 +599,7 @@ def colaboradores():
 def busqueda(criterio, campo):
     if 'user' in session:
         limit = 10
-        if criterio == 'edad' or criterio == 'cedula' :
+        if criterio == 'edad' or criterio == 'cedula':
             campo = int(campo)
         else:
             campo = campo.upper()
@@ -826,7 +836,7 @@ def new_paquete():
             tabla_paquetes.insert_one(paquete)
             flash('Paquete creado satisfactoriamente', 'success')
         form.nombre_paquete.data = ''
-        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form=form, legend = 'Nuevo Paquete')
+        return render_template('new_paquete.html', title='Paquetes', control_center=True, css=True, form=form, legend='Nuevo Paquete')
     else:
         return redirect(url_for('login'))
 
@@ -852,7 +862,7 @@ def new_empresa():
             }
             tabla_empresas.insert_one(empresa)
             flash('Empresa creada satisfactoriamente', 'success')
-        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form=form, legend = 'Nueva Empresa')
+        return render_template('new_empresa.html', title='Empresa', control_center=True, css=True, form=form, legend='Nueva Empresa')
     else:
         return redirect(url_for('login'))
 
@@ -863,10 +873,11 @@ def paquetes():
         paquetes = []
         busqueda = tabla_paquetes.find_one({'creador': session['user']})
         if busqueda:
-            paquetes = tabla_paquetes.find({'creador': session['user']}).sort("_id", -1)
-            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes = False)
+            paquetes = tabla_paquetes.find(
+                {'creador': session['user']}).sort("_id", -1)
+            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes=False)
         else:
-            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes = True)
+            return render_template('paquetes.html', title='Paquetes', control_center=True, css=True, paquetes=paquetes, vacio_paquetes=True)
     else:
         return redirect(url_for('login'))
 
@@ -877,30 +888,35 @@ def empresas():
         empresas = []
         busqueda = tabla_empresas.find_one({'creador': session['user']})
         if busqueda:
-            empresas = tabla_empresas.find({'creador': session['user']}).sort("_id", -1)
-            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas = False)
+            empresas = tabla_empresas.find(
+                {'creador': session['user']}).sort("_id", -1)
+            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas=False)
         else:
-            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas = True)
-            
+            return render_template('empresas.html', title='Empresas', control_center=True, css=True, empresas=empresas, vacio_empresas=True)
+
     else:
         return redirect(url_for('login'))
+
 
 @app.route("/paquetes/<_id>/delete", methods=['POST'])
 def borrar_paquete(_id):
     tabla_paquetes.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('paquetes'))
 
+
 @app.route("/empresas/<_id>/delete", methods=['POST'])
 def borrar_empresa(_id):
     tabla_empresas.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('empresas'))
+
 
 @app.route("/paquetes/<_id>/update", methods=['GET', 'POST'])
 def actualizar_paquete(_id):
     paquete = tabla_paquetes.find_one({'_id': ObjectId(_id)})
     examenes = tabla_examenes.find({'creador': session['user']})
     form = PaqueteForm()
-    form.l_examenes.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
+    form.l_examenes.choices = [
+        (examen['nombre'], examen['nombre']) for examen in examenes]
     if form.validate_on_submit():
         cambios = {
             'creador': session['user'],
@@ -916,7 +932,8 @@ def actualizar_paquete(_id):
         form.nombre_paquete.data = paquete['nombre']
         form.l_examenes.data = paquete['examenes']
         form.tarifa.data = paquete['tarifa']
-    return render_template('new_paquete.html', title='Actualizar Paquete', control_center=True, form=form, css=True, legend = 'Actualizar Paquete')
+    return render_template('new_paquete.html', title='Actualizar Paquete', control_center=True, form=form, css=True, legend='Actualizar Paquete')
+
 
 @app.route("/empresas/<_id>/update", methods=['GET', 'POST'])
 def actualizar_empresa(_id):
@@ -924,8 +941,10 @@ def actualizar_empresa(_id):
     form = EmpresaForm()
     examenes = tabla_examenes.find({'creador': session['user']})
     paquetes = tabla_paquetes.find({'creador': session['user']})
-    form.l_examenes.choices = [(examen['nombre'], examen['nombre']) for examen in examenes]
-    form.l_paquetes.choices = [(paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+    form.l_examenes.choices = [
+        (examen['nombre'], examen['nombre']) for examen in examenes]
+    form.l_paquetes.choices = [
+        (paquete['nombre'], paquete['nombre']) for paquete in paquetes]
     if form.validate_on_submit():
         cambios = {
             'creador': session['user'],
@@ -941,5 +960,4 @@ def actualizar_empresa(_id):
         form.nombre_empresa.data = empresa['nombre']
         form.l_examenes.data = empresa['examenes']
         form.l_paquetes.data = empresa['paquetes']
-    return render_template('new_empresa.html', title='Actualizar Empresa', control_center=True, form=form, css=True, legend = 'Actualizar Empresa')
-
+    return render_template('new_empresa.html', title='Actualizar Empresa', control_center=True, form=form, css=True, legend='Actualizar Empresa')

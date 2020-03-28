@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   {% if css %}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main2.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main10.css') }}">
   {% else %}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main3.css') }}">
   {% endif %}
@@ -38,9 +38,6 @@
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if control_center %}
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new_paquete')}}">Nuevo Paquete</a>
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new_empresa')}}">Nueva Empresa</a>
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new')}}">Nuevo Estudio</a>
             <a class="nav-item nav-link" href="{{url_for('logout')}}">Salir</a>
             {% else %}
             <a class="nav-item nav-link" href="{{url_for('login')}}">Iniciar Sesion</a>
@@ -61,7 +58,6 @@
         <div class="alert alert-{{ category }}">
           {{message}}
         </div>
-
         {%endfor%}
         {% endif %}
         {% endwith %}
@@ -70,44 +66,59 @@
       {% if control_center %}
       <div class="col-md-4">
         <div class="content-section sticky-top">
-          <h3 align='center'>Panel De Control</h3>
-          <ul class="list-group">
+          <h3 class="mb-3" align='center'>PANEL DE CONTROL</h3>
+          <ul class="list-group text-center">
             <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                 href="{{url_for('perfil')}}">Perfil</a>
             </li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('colaboradores')}}">Areas</a>
-            </li>
             <li class="list-group-item">
-              <a class="dropdown-toggle nav-item nav-link" href="#" role="button" id="dropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-item nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Estudios
               </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="nav-link list-group-item-light dropdown-item" href="{{url_for('historial')}}">Estudios</a>
-                <a class="nav-link list-group-item-light dropdown-item"
-                  href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a>
+              <div class="col exepcion dropdown-menu animated fadeIn" aria-labelledby="dropdownMenuLink">
+                <a class="list-group-item-light" href="{{url_for('historial')}}">Estudios</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new')}}">Nuevo Estudio</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a>
               </div>
             </li>
             <li class="list-group-item">
-              <a class="dropdown-toggle nav-item nav-link" href="#" role="button" id="dropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Examenes
+              <a class="nav-item nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Empresas
               </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="nav-link list-group-item-light dropdown-item" href="{{url_for('new_examen')}}">Examenes</a>
-                <a class="nav-link list-group-item-light dropdown-item" href="{{url_for('paquetes')}}">Paquete de
-                  Examenes</a>
+              <div class="col exepcion dropdown-menu animated fadeIn" aria-labelledby="dropdownMenuLink">
+                <a class="list-group-item-light" href="{{url_for('empresas')}}">Empresas</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new_empresa')}}">Nueva
+                  Empresa</a>
               </div>
             </li>
-            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                href="{{url_for('empresas')}}">Empresas</a>
+            <li class="list-group-item">
+              <a class="nav-item nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Examenes
+              </a>
+              <div class="col exepcion dropdown-menu animated fadeIn" aria-labelledby="dropdownMenuLink">
+                <a class="list-group-item-light" href="{{url_for('new_examen')}}">Examenes</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new_paquete')}}">Nuevo
+                  Paquete</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('paquetes')}}">Paquete de
+                  Examenes</a>
+              </div>
             </li>
             <li class="list-group-item list-group-item-light">
               <a class='nav-item nav-link' href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a>
             </li>
             <li class="list-group-item list-group-item-light">
               <a class="nav-item nav-link" href="{{url_for('index')}}">Notificaciones</a>
+            </li>
+            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+                href="{{url_for('colaboradores')}}">Áreas o colaboradores</a>
             </li>
             <!-- <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                   href="{{url_for('consulta')}}">Consulta Virtual</a></li>
@@ -119,10 +130,6 @@
       {% endif %}
     </div>
   </main>
-
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
@@ -132,7 +139,6 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
-
 </body>
 
 </html>

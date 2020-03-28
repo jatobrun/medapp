@@ -36,6 +36,11 @@ h6 {
   z-index: 1020;
 }
 
+.exepcion{
+  transform: translate3d(0px,63px,0px)!important;
+  text-align: center;
+}
+
 .content-section {
   background: #ffffff;
   padding: 20px 20px;

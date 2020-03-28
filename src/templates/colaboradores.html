@@ -1,40 +1,35 @@
 {%extends 'base.html'%} {%block body%}
 
 <div class="content-section">
-    <div class="media">
-        <img class="rounded-circle account-img" src="{{ profile }}">
-        <div class="media-body">
-            <h2 class="account-heading">{{session['user']}}</h2>
-            <p class="text-secondary">{{session['email']}}</p>
-        </div>
-    </div>
     <div class=" animated fadeInUp ">
         <form method="POST" action="" enctype='multipart/form-data'>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Agrega Tus Colaboradores</legend>
+                <legend class="border-bottom mb-4">Áreas o Colaboradores</legend>
                 <div class="form-group">
                     {{ form.colaborador.label(class="form-control-label") }}
                     {% if form.colaborador.errors %} {{ form.colaborador(class="form-control form-control-lg
              is-invalid") }}
-                   <div class="invalid-feedback">
-                       {% for error in form.colaborador.errors %}
-                       <span>{{ error }}</span>
-                       {% endfor %}
-                   </div>
-                   {% else %} {{ form.colaborador(class="form-control form-control-lg") }} {%
+                    <div class="invalid-feedback">
+                        {% for error in form.colaborador.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.colaborador(class="form-control form-control-lg") }} {%
              endif %}
-               </div>
-               <p class="form-control-label">Tus colaboradores</p>
-               <div align="justify" class = "media content-section animated fadeInUp ">
-                   
-                   {% if vacio_colaboradores %}    
-                   <p> No tienes colaboradores disponibles. Agrega algun colaborador con el cual podras compartir tus estudios clinicos.</p>
-                   {% else %}
-                       {% for colaborador in colaboradores %}
-                       {{colaborador+' - '}}
-                       {% endfor %}
-                   {% endif %}
+                </div>
+                <p class="form-control-label">Áreas o colaboradores agregados:</p>
+                <div align="justify" class="media content-section animated fadeInUp ">
+
+                    {% if vacio_colaboradores %}
+                    <p> No tienes áreas/colaboradores agregados actualmente. Agrega alguna área/colaborador con el cual
+                        podras compartir tus estudios clinicos.
+                    </p>
+                    {% else %}
+                    {% for colaborador in colaboradores %}
+                    {{colaborador+' - '}}
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">
@@ -42,5 +37,5 @@
             </div>
         </form>
     </div>
-    </div>
+</div>
 {% endblock %}
