@@ -1,10 +1,10 @@
 {%extends 'base1.html'%} {%block body%}
 
-<div class="content-section animated fadeInUp">
+<div class="content-section animated fadeInUp" style="margin-top: 20%;">
     <form method="POST" action="" enctype='multipart/form-data'>
         {{form.hidden_tag()}}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4"></legend>{{form.token.label(class="form-control-label")}}</legend>
+            <legend class="mb-4"></legend>{{form.token.label(class="form-control-label")}}</legend>
             <div class="form-group">
                 {% if
           form.token.errors %} {{ form.token(class="form-control
