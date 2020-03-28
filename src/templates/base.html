@@ -65,78 +65,78 @@
       </div>
       {% if control_center %}
       <div class="col-md-4">
-        <nav>
-          <div class="content-section sticky-top">
-            <h3 class="mb-3" align='center'>PANEL DE CONTROL</h3>
-            <ul class="list-group text-center">
-              <li class="list-group-item">
-                <a class="nav-item nav-link" href="{{url_for('perfil')}}">Perfil</a>
-              </li>
-              <li class="list-group-item">
-                <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
-                  data-target="#estudios-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
-                  aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
-                  Estudios
-                </a>
-                <div id="estudios-nav" class="collapse navbar-collapse">
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('historial')}}">Estudios</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('new')}}">Nuevo Estudio</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
-                  data-target="#empresas-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
-                  aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
-                  Empresas
-                </a>
-                <div id="empresas-nav" class="collapse navbar-collapse">
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('empresas')}}">Empresas</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('new_empresa')}}">Nueva
-                    Empresa</a>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
-                  data-target="#examenes-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
-                  aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
-                  Examenes
-                </a>
-                <div id="examenes-nav" class="collapse navbar-collapse">
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('new_examen')}}">Examenes</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('new_paquete')}}">Nuevo
-                    Paquete</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="list-group-item-light" href="{{url_for('paquetes')}}">Paquete de
-                    Examenes</a>
-                </div>
-              </li>
-              <li class="list-group-item list-group-item-light">
-                <a class='nav-item nav-link' href="{{ url_for('estadisticas', user=session['user']) }}">Estadisticas</a>
-              </li>
-              <li class="list-group-item list-group-item-light">
-                <a class="nav-item nav-link" href="{{url_for('index')}}">Notificaciones</a>
-              </li>
-              <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
-                  href="{{url_for('colaboradores')}}">Áreas o colaboradores</a>
-              </li>
-              <!-- <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+        <nav class="sticky-top"">
+          <div class=" content-section">
+          <h3 class="mb-3" align='center'>PANEL DE CONTROL</h3>
+          <ul class="list-group text-center">
+            <li class="list-group-item">
+              <a class="nav-item nav-link" href="{{url_for('perfil')}}">Perfil</a>
+            </li>
+            <li class="list-group-item">
+              <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
+                data-target="#estudios-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
+                Estudios
+              </a>
+              <div id="estudios-nav" class="collapse navbar-collapse">
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('historial')}}">Estudios</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new')}}">Nuevo Estudio</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('estudios_compartidos')}}">Estudios Compartidos</a>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
+                data-target="#empresas-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
+                Empresas
+              </a>
+              <div id="empresas-nav" class="collapse navbar-collapse">
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('empresas')}}">Empresas</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new_empresa')}}">Nueva
+                  Empresa</a>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a class="nav-item nav-link navbar-toggler collapsed" href="#" role="button" data-toggle="collapse"
+                data-target="#examenes-nav" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                aria-expanded="false" style="font-size: 16px!important; padding: 8px 16px!important;">
+                Exámenes
+              </a>
+              <div id="examenes-nav" class="collapse navbar-collapse">
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new_examen')}}">Exámenes</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('new_paquete')}}">Nuevo
+                  Paquete</a>
+                <div class="dropdown-divider"></div>
+                <a class="list-group-item-light" href="{{url_for('paquetes')}}">Paquete de
+                  Examenes</a>
+              </div>
+            </li>
+            <li class="list-group-item list-group-item-light">
+              <a class='nav-item nav-link' href="{{ url_for('estadisticas', user=session['user']) }}">Estadísticas</a>
+            </li>
+            <li class="list-group-item list-group-item-light">
+              <a class="nav-item nav-link" href="{{url_for('index')}}">Notificaciones</a>
+            </li>
+            <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
+                href="{{url_for('colaboradores')}}">Áreas o Colaboradores</a>
+            </li>
+            <!-- <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                     href="{{url_for('consulta')}}">Consulta Virtual</a></li>
                   <li class="list-group-item list-group-item-light"><a class="nav-item nav-link"
                     href="{{url_for('ia')}}">IA</a></li> -->
-            </ul>
-          </div>
-
-        </nav>
+          </ul>
       </div>
-      {% endif %}
+
+      </nav>
+    </div>
+    {% endif %}
     </div>
   </main>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
