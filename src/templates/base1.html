@@ -41,10 +41,6 @@
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if control_center %}
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new_paquete')}}">Nuevo Paquete</a>
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new_empresa')}}">Nueva Empresa</a>
-            <a class="nav-item nav-link mr-auto" href="{{url_for('new')}}">Nuevo Estudio</a>
-            <a class="nav-item nav-link" href="{{url_for('logout')}}">Salir</a>
             {% else %}
             <a class="nav-item nav-link" href="{{url_for('login')}}">Iniciar Sesion</a>
             <a class="nav-item nav-link" href="{{url_for('register')}}">Registrate</a>
