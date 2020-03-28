@@ -334,6 +334,10 @@ def perfil():
                        'email': form.email.data, 'image': session['image']}
             tabla_usuarios.update_one(
                 {'usuario': session['user']}, {'$set': cambios})
+            tabla_paquetes.update_many({'creador': session['user']},{'$set': {'creador': form.username.data}})
+            tabla_examenes.update_many({'creador': session['user']},{'$set': {'creador': form.username.data}})
+            tabla_estudios.update_many({'creador': session['user']},{'$set': {'creador': form.username.data}})
+            tabla_empresas.update_many({'creador': session['user']},{'$set': {'creador': form.username.data}})
             session['user'] = form.username.data
             session['email'] = form.email.data
             flash('Tus cambios se han actualizado', 'success')
