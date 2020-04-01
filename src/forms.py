@@ -90,7 +90,7 @@ class PostForm(FlaskForm):
     contenido = TextAreaField('Sintomas')
     diagnostico = TextAreaField('Diagnostico Presuntivo')
     comentarios = TextAreaField('Comentarios/Sugerencias')
-    archivo = MultipleFileField('Muchos archivos')
+    archivo = MultipleFileField('')
     submit = SubmitField('Agregar Estudio')
 
 
