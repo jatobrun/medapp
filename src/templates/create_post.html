@@ -89,6 +89,22 @@
                 {% else %} {{ form.titulo(class="form-control form-control-lg") }} {%
           endif %}
             </div>
+            <div>
+                {{form.noExamen.label(class="form-control-label")}} <a href="#" role="button" data-toggle="collapse"
+                    data-target="#text-noexam" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                    aria-expanded="false" class="list-group-item-light navbar-toggler collapsed">...</a>
+                <div id="text-noexam" class="mt-1 collapse navbar-collapse mb-3">
+                    {% if form.noExamen.errors %} {{ form.noExamen(class="form-control
+                        form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.noExamen.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.noExamen(class="form-control form-control-lg") }} {%
+                    endif %}
+                </div>
+            </div>
             <div class="form-group">
                 {{form.colaborador.label(class="form-control-label")}}{% if
             form.colaborador.errors %} {{ form.colaborador(class="form-control
@@ -113,54 +129,56 @@
                 {% else %} {{ form.nombre_doctor(class="form-control form-control-lg") }} {%
             endif %}
             </div>
-            <div class="form-group">
-                {{form.contenido.label(class="form-control-label")}} {% if
-            form.contenido.errors %} {{ form.contenido(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.contenido.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %} {{ form.contenido(class="form-control form-control-lg") }} {%
+            <div>
+                {{form.contenido.label(class="form-control-label")}} <a href="#" role="button" data-toggle="collapse"
+                    data-target="#text-sint" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                    aria-expanded="false" class="list-group-item-light navbar-toggler collapsed">...</a>
+                <div id="text-sint" class="collapse navbar-collapse mb-3">
+                    {% if form.contenido.errors %} {{ form.contenido(class="form-control
+                form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.contenido.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.contenido(class="form-control form-control-lg") }} {%
             endif %}
-            </div>
-            <div class="form-group">
-                {{form.diagnostico.label(class="form-control-label")}} {% if
-            form.diagnostico.errors %} {{ form.diagnostico(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.diagnostico.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
                 </div>
-                {% else %} {{ form.diagnostico(class="form-control form-control-lg") }} {%
-            endif %}
             </div>
-            <div class="form-group">
-                {{form.noExamen.label(class="form-control-label")}} {% if
-            form.noExamen.errors %} {{ form.noExamen(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.noExamen.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+            <div>
+                {{form.diagnostico.label(class="form-control-label")}}<a href="#" role="button" data-toggle="collapse"
+                    data-target="#text-diag" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                    aria-expanded="false" class="list-group-item-light navbar-toggler collapsed">...</a>
+                <div id="text-diag" class="collapse navbar-collapse mb-3">
+                    {% if form.diagnostico.errors %}{{ form.diagnostico(class="form-control
+                    form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.diagnostico.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.diagnostico(class="form-control form-control-lg") }} {%
+                    endif %}
                 </div>
-                {% else %} {{ form.noExamen(class="form-control form-control-lg") }} {%
-            endif %}
             </div>
-            <div class="form-group">
-                {{form.comentarios.label(class="form-control-label")}} {% if
-            form.comentarios.errors %} {{ form.comentarios(class="form-control
-            form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.comentarios.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+            <div>
+                {{form.comentarios.label(class="form-control-label")}}<a href="#" role="button" data-toggle="collapse"
+                    data-target="#text-com" aria-controls="navbarToggle" aria-label="Toggle navigation"
+                    aria-expanded="false" class="list-group-item-light navbar-toggler collapsed">...</a>
+                <div id="text-com" class="mt-1 collapse navbar-collapse mb-3">
+                    {% if form.comentarios.errors %} {{ form.comentarios(class="form-control
+                form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.comentarios.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %} {{ form.comentarios(class="form-control form-control-lg") }} {%
+            endif %}
                 </div>
-                {% else %} {{ form.comentarios(class="form-control form-control-lg") }} {%
-            endif %}
             </div>
+            <div class="dropdown-divider"></div>
+            <h3 class="header">Cargar archivos:</h3>
             <div class="form-group">
                 {{ form.archivo1.label() }}
                 {{ form.archivo1(class='form-control-file') }}
