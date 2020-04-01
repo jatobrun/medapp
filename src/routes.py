@@ -114,20 +114,19 @@ def new():
             (empresa['nombre'], empresa['nombre']) for empresa in empresas]
         form.paquete.choices = [
             (paquete['nombre'], paquete['nombre']) for paquete in paquetes]
-        print(len(form.colaborador.choices))
+        
         if len(form.colaborador.choices) <= 1:
-            print('no tienes colaboradores')
-            colaborador = False
-        else:
             colaborador = True
+        else:
+            colaborador = False
         if len(form.empresa.choices) == 1:
-            empresa = False
-        else:
             empresa = True
-        if len(form.paquete.choices) == 1:
-            paquete = False
         else:
+            empresa = False
+        if len(form.paquete.choices) == 1:
             paquete = True
+        else:
+            paquete = False
         if form.validate_on_submit():
             token = secrets.token_hex(3)
             if form.archivo.data:

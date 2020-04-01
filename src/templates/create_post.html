@@ -55,6 +55,19 @@
             </div>
             {% if empresa %}
             <div class="form-group">
+                {{form.empresa.label(class="form-control-label", style="display: none;")}} {% if
+            form.empresa.errors %} {{ form.empresa(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.empresa.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.empresa(class="form-control form-control-lg", style="display: none;") }} {%
+            endif %}
+            </div>
+            {% else %}
+            <div class="form-group">
                 {{form.empresa.label(class="form-control-label")}} {% if
             form.empresa.errors %} {{ form.empresa(class="form-control
             form-control-lg is-invalid") }}
@@ -68,6 +81,19 @@
             </div>
             {% endif %}
             {% if paquete %}
+            <div class="form-group">
+                {{form.paquete.label(class="form-control-label", style = "display: none;")}} {% if
+            form.paquete.errors %} {{ form.paquete(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.paquete.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.paquete(class="form-control form-control-lg", style = "display: none;") }} {%
+            endif %}
+            </div>
+            {% else %}
             <div class="form-group">
                 {{form.paquete.label(class="form-control-label")}} {% if
             form.paquete.errors %} {{ form.paquete(class="form-control
@@ -110,6 +136,19 @@
                 </div>
             </div>
             {% if colaborador %}
+            <div class="form-group">
+                {{form.colaborador.label(class="form-control-label", style = "display: none;")}}{% if
+            form.colaborador.errors %} {{ form.colaborador(class="form-control
+            form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.colaborador.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %} {{ form.colaborador(class="form-control form-control-lg", style = "display:none;") }} {%
+            endif %}
+            </div>
+            {% else %}
             <div class="form-group">
                 {{form.colaborador.label(class="form-control-label")}}{% if
             form.colaborador.errors %} {{ form.colaborador(class="form-control
