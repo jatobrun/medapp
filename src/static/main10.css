@@ -3,6 +3,7 @@ body {
     color: #333333;
     margin-top: 5rem;
     font-family: 'Changa', sans-serif;
+    font-size: 110%;
   }
   
 h1,
@@ -15,7 +16,7 @@ h6 {
 }
 
 .bg-steel {
-  background-color: #5C73F2;
+  background-color: #1133F2;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -40,6 +41,10 @@ h6 {
 .exepcion{
   transform: translate3d(0px,63px,0px)!important;
   text-align: center;
+}
+
+.text-box{
+  font-size: 90%;
 }
 
 .content-section {
