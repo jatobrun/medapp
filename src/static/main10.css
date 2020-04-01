@@ -43,6 +43,10 @@ h6 {
   text-align: center;
 }
 
+.margin-corr{
+  margin: 3.5px 0px 3.5px 0px;
+}
+
 .text-box{
   font-size: 90%;
 }
