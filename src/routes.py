@@ -4,8 +4,9 @@ import time
 import secrets
 from flask import render_template, flash, redirect, url_for, session, request
 from src.forms import Registration_Form, LogIn_Form, UpdateAccount_Form, PostForm, BuscadorForm, Add_colaboradorForm, ColaboradoresForm, Buscador2Form, PaqueteForm, EmpresaForm, ExamenForm
-from src import app, bcrypt, tabla_estudios, tabla_usuarios, tabla_examenes, tabla_paquetes, tabla_empresas, Cloud
+from src import app, bcrypt, tabla_estudios, tabla_usuarios, tabla_examenes, tabla_paquetes, tabla_empresas, Cloud, tabla_archivos
 import cloudinary.uploader as uploader
+import cloudinary.api 
 # from flask_login import current_user, login_user
 from bson.objectid import ObjectId
 from math import ceil
@@ -299,21 +300,47 @@ def register():
 
 
 def save_picture(form_picture, resize=True, tomografia=False):
+    extensions = ['.jpg', '.jpeg', '.tif', '.pdf']
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    if resize:
-        picture_path = os.path.join(
-            app.root_path, 'static/profile-pic', picture_fn)
-        output_size = (125, 125)
-        i = Image.open(form_picture)
-        i.thumbnail(output_size)
-        i.save(picture_path)
+    if f_ext in extensions:
+        if resize:
+            picture_path = os.path.join(
+                app.root_path, 'static/profile-pic', picture_fn)
+            output_size = (125, 125)
+            i = Image.open(form_picture)
+            i.thumbnail(output_size)
+            i.save(picture_path)
+            subida = uploader.upload(picture_path, folder = session['user']+'/profile-pic', public_id = random_hex)
+            archivo = {
+                'nombre':picture_fn,
+                'fecha': time.strftime("%d-%m-%Y"),
+                'url':subida['secure_url'],
+                'creador': session['user'],
+                'path': picture_path
+            }
+        else:
+            picture_path = os.path.join(app.root_path, 'static/estudio-pic', picture_fn)
+            form_picture.save(picture_path)
+            subida = uploader.upload(picture_path, folder = session['user']+'/'+f_ext[1:], public_id = random_hex)
+            archivo = {
+                'nombre':picture_fn,
+                'fecha': time.strftime("%d-%m-%Y"),
+                'url':subida['secure_url'],
+                'creador': session['user'],
+                'path': picture_path
+            }
     else:
-        picture_path = os.path.join(
-            app.root_path, 'static/estudio-pic', picture_fn)
+        picture_path = os.path.join(app.root_path, 'static/estudio-pic', picture_fn)
         form_picture.save(picture_path)
-        uploader.upload(picture_path)
+        archivo = {
+                'nombre':picture_fn,
+                'fecha': time.strftime("%d-%m-%Y"),
+                'creador': session['user'],
+                'path': picture_path
+            }
+    tabla_archivos.insert_one(archivo)
     return picture_fn, f_ext
 
 

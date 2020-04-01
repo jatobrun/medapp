@@ -17,6 +17,7 @@ tabla_estudios = db['Estudios']
 tabla_examenes = db['Examenes']
 tabla_paquetes = db['Paquetes']
 tabla_empresas = db['Empresas']
+tabla_archivos = db['Archivos']
 bcrypt = Bcrypt(app)
 Cloud.config(
     cloud_name="dscvja8yk",
