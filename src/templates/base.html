@@ -5,6 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://kit.fontawesome.com/c6a46d5ed8.js" crossorigin="anonymous"></script>
   {% block head %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -15,6 +16,7 @@
   {% endif %}
   <link href="https://fonts.googleapis.com/css?family=Changa&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <script src="{{ url_for('static', filename='funciones.js')}}"></script>
   {%if title%}
   <title>{{title}}</title>
   {%else%}
@@ -52,7 +54,7 @@
   <main role="main" class="container">
     <div class="row">
 
-      <div class="col-md-8">
+      <div class="col-md-9">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {%if messages%}
         {% for category, message in messages%}
@@ -65,7 +67,7 @@
         {% block body %}{% endblock %}
       </div>
       {% if control_center %}
-      <div class="col-md-4">
+      <div class="col-md-3">
         <nav class="sticky-top"">
           <div class=" content-section">
           <h3 class="mb-3" align='center'>PANEL DE CONTROL</h3>

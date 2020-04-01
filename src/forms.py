@@ -76,20 +76,20 @@ class UpdateAccount_Form(FlaskForm):
 class PostForm(FlaskForm):
     paquete = SelectField('Escoge un paquete')
     titulo = SelectMultipleField('Examen(es) a realizar:')
-    noExamen = StringField('Ingrese los examenes no realizados:')
-    cedula = IntegerField('Cedula:')
+    noExamen = StringField('EXAMENES NO REALIZADOS')
+    cedula = IntegerField('*Cedula:')
     empresa = SelectField('Empresa:')
     colaborador = SelectField('Area:')
     nombre_paciente = StringField(
-        'Nombre del paciente:')
+        '*Nombre del paciente:')
     apellido_paciente = StringField(
-        'Apellido del paciente:')
-    edad = IntegerField('Edad del paciente:')
+        '*Apellido del paciente:')
+    edad = IntegerField('*Edad del paciente:')
     nombre_doctor = StringField(
         'Nombre Completo Del Doctor:')
-    contenido = TextAreaField('Sintomas:')
-    diagnostico = TextAreaField('Diagnostico Presuntivo:')
-    comentarios = TextAreaField('Comentarios/Sugerencias:')
+    contenido = TextAreaField('Sintomas')
+    diagnostico = TextAreaField('Diagnostico Presuntivo')
+    comentarios = TextAreaField('Comentarios/Sugerencias')
     archivo1 = FileField('Radiografia 1', validators=[
         FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
     archivo2 = FileField('Radiografia 2', validators=[
