@@ -90,23 +90,7 @@ class PostForm(FlaskForm):
     contenido = TextAreaField('Sintomas')
     diagnostico = TextAreaField('Diagnostico Presuntivo')
     comentarios = TextAreaField('Comentarios/Sugerencias')
-    archivo1 = FileField('Radiografia 1', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
-    archivo2 = FileField('Radiografia 2', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
-    archivo3 = FileField('Radiografia 3', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
-    archivo4 = FileField('Radiografia 4', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
-    archivo5 = FileField('Radiografia 5', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg', 'tif'])])
-    archivo6 = FileField('Tomografia1 DICOM', validators=[
-        FileAllowed(['DCM', 'jpg', 'png', 'dcm'])])
-    archivo7 = FileField('Tomografia2 DICOM', validators=[
-        FileAllowed(['DCM', 'png', 'jpg', 'dcm'])])
-    archivo8 = FileField('Tomografia3 DICOM', validators=[
-        FileAllowed(['DCM', 'jpg', 'png', 'dcm'])])
-    archivo9 = FileField('Archivos varios', validators=[FileAllowed(['pdf'])])
+    archivo = MultipleFileField('Muchos archivos')
     submit = SubmitField('Agregar Estudio')
 
 

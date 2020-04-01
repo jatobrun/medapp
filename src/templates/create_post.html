@@ -53,6 +53,7 @@
                 {% else %} {{ form.edad(class="form-control form-control-lg") }} {%
             endif %}
             </div>
+            {% if empresa %}
             <div class="form-group">
                 {{form.empresa.label(class="form-control-label")}} {% if
             form.empresa.errors %} {{ form.empresa(class="form-control
@@ -65,6 +66,8 @@
                 {% else %} {{ form.empresa(class="form-control form-control-lg") }} {%
             endif %}
             </div>
+            {% endif %}
+            {% if paquete %}
             <div class="form-group">
                 {{form.paquete.label(class="form-control-label")}} {% if
             form.paquete.errors %} {{ form.paquete(class="form-control
@@ -77,6 +80,7 @@
                 {% else %} {{ form.paquete(class="form-control form-control-lg") }} {%
             endif %}
             </div>
+            {% endif %}
             <div class="form-group">
                 {{form.titulo.label(class="form-control-label")}} {% if
           form.titulo.errors %} {{ form.titulo(class="form-control
@@ -105,6 +109,7 @@
                     endif %}
                 </div>
             </div>
+            {% if colaborador %}
             <div class="form-group">
                 {{form.colaborador.label(class="form-control-label")}}{% if
             form.colaborador.errors %} {{ form.colaborador(class="form-control
@@ -117,6 +122,7 @@
                 {% else %} {{ form.colaborador(class="form-control form-control-lg") }} {%
             endif %}
             </div>
+            {% endif %}
             <div class="form-group">
                 {{form.nombre_doctor.label(class="form-control-label")}} {% if
             form.nombre_doctor.errors %} {{ form.nombre_doctor(class="form-control
@@ -180,82 +186,10 @@
             <div class="dropdown-divider"></div>
             <h3 class="header">Cargar archivos:</h3>
             <div class="form-group">
-                {{ form.archivo1.label() }}
-                {{ form.archivo1(class='form-control-file') }}
-                {% if form.archivo1.errors %}
-                {% for error in form.archivo1.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo2.label() }}
-                {{ form.archivo2(class='form-control-file') }}
-                {% if form.archivo2.errors %}
-                {% for error in form.archivo2.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo3.label() }}
-                {{ form.archivo3(class='form-control-file') }}
-                {% if form.archivo3.errors %}
-                {% for error in form.archivo3.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo4.label() }}
-                {{ form.archivo4(class='form-control-file') }}
-                {% if form.archivo4.errors %}
-                {% for error in form.archivo4.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo5.label() }}
-                {{ form.archivo5(class='form-control-file') }}
-                {% if form.archivo5.errors %}
-                {% for error in form.archivo5.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo6.label() }}
-                {{ form.archivo6(class='form-control-file') }}
-                {% if form.archivo6.errors %}
-                {% for error in form.archivo6.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo7.label() }}
-                {{ form.archivo7(class='form-control-file') }}
-                {% if form.archivo7.errors %}
-                {% for error in form.archivo7.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo8.label() }}
-                {{ form.archivo8(class='form-control-file') }}
-                {% if form.archivo8.errors %}
-                {% for error in form.archivo8.errors %}
-                <span class='text-danger'>{{ error }}</span></br>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.archivo9.label() }}
-                {{ form.archivo9(class='form-control-file') }}
-                {% if form.archivo9.errors %}
-                {% for error in form.archivo9.errors %}
+                {{ form.archivo.label() }}
+                {{ form.archivo(class='form-control-file') }}
+                {% if form.archivo.errors %}
+                {% for error in form.archivo.errors %}
                 <span class='text-danger'>{{ error }}</span></br>
                 {% endfor %}
                 {% endif %}

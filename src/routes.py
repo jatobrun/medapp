@@ -114,73 +114,29 @@ def new():
             (empresa['nombre'], empresa['nombre']) for empresa in empresas]
         form.paquete.choices = [
             (paquete['nombre'], paquete['nombre']) for paquete in paquetes]
+        print(len(form.colaborador.choices))
+        if len(form.colaborador.choices) <= 1:
+            print('no tienes colaboradores')
+            colaborador = False
+        else:
+            colaborador = True
+        if len(form.empresa.choices) == 1:
+            empresa = False
+        else:
+            empresa = True
+        if len(form.paquete.choices) == 1:
+            paquete = False
+        else:
+            paquete = True
         if form.validate_on_submit():
-            n_radiografias = 0
-            n_tomografias = 0
             token = secrets.token_hex(3)
-            if form.archivo1.data:
-                archivo1, f_ext1 = save_picture(
-                    form.archivo1.data, resize=False)
-                n_radiografias += 1
+            if form.archivo.data:
+                archivo = []
+                for e in form.archivo.data:
+                    f_name, f_ext = save_picture(e, resize=False)
+                    archivo.append((f_name, f_ext))
             else:
-                archivo1 = 'nada'
-                f_ext1 = '.'
-            if form.archivo2.data:
-                archivo2, f_ext2 = save_picture(
-                    form.archivo2.data, resize=False)
-                n_radiografias += 1
-            else:
-                archivo2 = 'nada'
-                f_ext2 = '.'
-            if form.archivo3.data:
-                archivo3, f_ext3 = save_picture(
-                    form.archivo3.data, resize=False)
-                n_radiografias += 1
-            else:
-                archivo3 = 'nada'
-                f_ext3 = '.'
-            if form.archivo4.data:
-                archivo4, f_ext4 = save_picture(
-                    form.archivo4.data, resize=False)
-                n_radiografias += 1
-            else:
-                archivo4 = 'nada'
-                f_ext4 = '.'
-            if form.archivo5.data:
-                archivo5, f_ext5 = save_picture(
-                    form.archivo5.data, resize=False)
-                n_radiografias += 1
-            else:
-                archivo5 = 'nada'
-                f_ext5 = '.'
-            if form.archivo6.data:
-                archivo6, f_ext6 = save_picture(
-                    form.archivo6.data, resize=False)
-                n_tomografias += 1
-            else:
-                archivo6 = 'nada'
-                f_ext6 = '.'
-            if form.archivo7.data:
-                archivo7, f_ext7 = save_picture(
-                    form.archivo7.data, resize=False)
-                n_tomografias += 1
-            else:
-                archivo7 = 'nada'
-                f_ext7 = '.'
-            if form.archivo8.data:
-                archivo8, f_ext8 = save_picture(
-                    form.archivo8.data, resize=False)
-                n_tomografias += 1
-            else:
-                archivo8 = 'nada'
-                f_ext8 = '.'
-            if form.archivo9.data:
-                archivo9, f_ext9 = save_picture(
-                    form.archivo9.data, resize=False)
-                n_tomografias += 1
-            else:
-                archivo9 = 'nada'
-                f_ext9 = '.'
+                archivo = [('nada', '')]
             if form.colaborador.data != 'nada':
                 compartido = 'compartido'
             else:
@@ -202,17 +158,15 @@ def new():
                 'examen-no-realizado': form.noExamen.data.upper(),
                 'comentarios': form.comentarios.data,
                 'fecha': time.strftime("%d-%m-%Y"),
-                'archivos': [(archivo1, '1', f_ext1), (archivo2, '2', f_ext2), (archivo3, '3', f_ext3), (archivo4, '4', f_ext4), (archivo5, '5', f_ext5), (archivo6, '6', f_ext6), (archivo7, '7', f_ext7), (archivo8, '8', f_ext8), (archivo9, '9', f_ext9)],
+                'archivos': archivo,
                 'token': token,
-                'n_radiografia': n_radiografias,
-                'n_tomografia': n_tomografias,
                 'colaboradores': form.colaborador.data,
                 'compartir': compartido
             }
             tabla_estudios.insert_one(estudio)
             flash('Estudio registrado correctamente', 'success')
             return redirect(url_for('new'))
-        return render_template('create_post.html', title='Nuevo Estudio', control_center=True, form=form, css=True, legend='Nuevo Estudio')
+        return render_template('create_post.html', title='Nuevo Estudio', control_center=True, form=form, css=True, legend='Nuevo Estudio', paquete= paquete, empresa = empresa, colaborador = colaborador)
     else:
         return redirect(url_for('login'))
 
@@ -300,7 +254,7 @@ def register():
 
 
 def save_picture(form_picture, resize=True, tomografia=False):
-    extensions = ['.jpg', '.jpeg', '.tif', '.pdf']
+    extensions = ['.jpg', '.jpeg', '.tif', '.pdf', '.PNG']
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
